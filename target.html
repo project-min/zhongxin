@@ -9,33 +9,16 @@
 
     <title>中新生态城</title>
 
-    <!-- Bootstrap -->
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css" rel="stylesheet" media="screen">
-    <!-- Font Awesome -->
-    <link href="./vendors/font-awesome/css/font-awesome.min.css" rel="stylesheet">
-    <!-- NProgress -->
-    <link href="./vendors/nprogress/nprogress.css" rel="stylesheet">
-
-    <!-- bootstrap-daterangepicker -->
-    <link href="./vendors/bootstrap-daterangepicker/daterangepicker.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/css/bootstrap-datepicker3.css"/>
-
-    <!-- Custom Theme Style -->
-    <link href="./build/css/custom.css" rel="stylesheet">
-    
-    <!-- ArcGIS css Begin -->
-    <link rel="stylesheet" href="https://js.arcgis.com/3.26/dijit/themes/nihilo/nihilo.css">
-    <link rel="stylesheet" type="text/css" href="http://js.arcgis.com/3.26/esri/css/esri.css">
-    <!-- ArcGIS css End -->
+    <link href="./assets/css/font-awesome.min.css" rel="stylesheet">
+    <link href="./assets/css/custom.css" rel="stylesheet">
     
     <style type="text/css">
 
     </style>
-    
-    <script src="https://js.arcgis.com/3.26/"></script>
   </head>
 
-  <body class="nav-md footer_fixed">
+  <body class="nav-md">
     <div class="container body">
       <div class="main_container">
         <div class="col-md-3 left_col menu_fixed">
@@ -47,13 +30,13 @@
                 <ul class="nav side-menu">
                   <li><a><i class="fa fa-group"></i>人口监控分析<span class="fa fa-chevron-down"></span></a>
                   </li>
-                  <li><a><i class="fa fa-wifi"></i>Wi-Fi热点分析<span class="fa fa-chevron-down"></span></a>
+                  <li><a><i class="fa fa-wifi"></i>WiFi热点分析<span class="fa fa-chevron-down"></span></a>
                   </li>
                   <li><a><i class="fa fa-comment-o"></i>公共信息发布<span class="fa fa-chevron-down"></span></a>
                     <ul class="nav child_menu">
-                      <li><a href="general_elements.html">短信发送</a></li>
-                      <li><a href="media_gallery.html">日志查询</a></li>
-                      <li><a href="typography.html">客群管理</a></li>
+                      <li><a href="task_create.html">短信发送</a></li>
+                      <li><a href="task.html">日志查询</a></li>
+                      <li><a href="target.html">客群管理</a></li>
                     </ul>
                   </li>
                 </ul>
@@ -78,20 +61,8 @@
                     <span class=" fa fa-angle-down"></span>
                   </a>
                   <ul class="dropdown-menu dropdown-usermenu pull-right">
-                    <li><a href="login.html"><i class="fa fa-sign-out pull-right"></i>Log Out</a></li>
+                    <li><a id="logout"><i class="fa fa-sign-out pull-right"></i>退出登录</a></li>
                   </ul>
-                </li>
-
-                <li role="presentation" class="dropdown">
-                  <a href="javascript:;" class="dropdown-toggle info-number" data-toggle="dropdown" aria-expanded="false">
-                    <i class="fa fa-bell-o"></i>
-                    <span class="badge bg-green">6</span>
-                  </a>
-                </li>
-                <li role="presentation" class="dropdown">
-                  <a href="javascript:;" class="dropdown-toggle info-number" data-toggle="dropdown" aria-expanded="false">
-                    <i class="fa fa-search"></i>
-                  </a>
                 </li>
               </ul>
             </nav>
@@ -110,14 +81,12 @@
                 </div>
                 <div class="x_content">
                   <div class="col-lg-6">
-                    <button type="button" class="btn btn-primary" id="map-confirm">新建</button>
-                  </div><!-- /input-group -->
+                    <a class="btn btn-primary" href="target_create.html" role="button">新建</a>
+                  </div>
                 
                   <div class="col-lg-6">
                     <div class="input-group" >
-                      <input type="time" id="end-time" style="float: right; margin-right: 1em;">
                       <input type="date" id="end-date" placeholder="YYYY-MM-DD" style="float: right; margin-right: 1em;">
-                      <input type="time" id="start-time" style="float: right; margin-right: 1em;">
                       <input type="date" id="start-date" placeholder="YYYY-MM-DD" style="float: right; margin-right: 1em;">
                       <span class="input-group-btn">
                         <button id="search" class="btn btn-default" type="button" style="float: right">查询</button>
@@ -193,38 +162,29 @@
                 <p></p>
               </div>
               <div class="modal-footer">
-                <button id="close-modal" type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button id="close-modal" type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
               </div>
             </div><!-- /.modal-content -->
           </div><!-- /.modal-dialog -->
         </div><!-- /.modal -->
         
-        <!-- footer content -->
+        <!--
         <footer>
           <div class="pull-right">
             中新生态城 <a href="https://colorlib.com"></a>
           </div>
           <div class="clearfix"></div>
         </footer>
-        <!-- /footer content -->
+        -->
         
       </div>
     </div>
 
     <script src="https://code.jquery.com/jquery-1.11.1.min.js"></script>
     <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
-    <script src="./vendors/Flot/jquery.flot.js"></script>
-    <script src="./vendors/Flot/jquery.flot.pie.js"></script>
-    <script src="./vendors/Flot/jquery.flot.time.js"></script>
-    <script src="./vendors/Flot/jquery.flot.stack.js"></script>
-    <script src="./vendors/Flot/jquery.flot.resize.js"></script>
-    <script src="./vendors/flot.orderbars/js/jquery.flot.orderBars.js"></script>
-    <script src="./vendors/flot-spline/js/jquery.flot.spline.min.js"></script>
-    <script src="./vendors/flot.curvedlines/curvedLines.js"></script>
-    <script src="./vendors/DateJS/build/date.js"></script>
+    <script src="./assets/js/date.js"></script>
     
-    <script src="./vendors/jQuery-Smart-Wizard/js/jquery.smartWizard.js"></script>
-    <script src="./build/js/custom.js"></script>
+    <script src="./assets/js/custom.js"></script>
     <script src="./assets/js/main.js"></script>
     <script src="./assets/js/jquery.sha1.js"></script>
 
@@ -246,15 +206,11 @@
         
         $('#start-date').val(day1);
         
-        var time1 = now.getHours() + ":" + now.getMinutes();
-        $('#start-time').val(time1);
-        $('#end-time').val(time1);
+        //var time1 = now.getHours() + ":" + now.getMinutes();
+        //$('#start-time').val(time1);
+        //$('#end-time').val(time1);
         
         $('#search').click(function() {
-          refreshTable();
-        });
-        
-        $('#close-modal').click(function() {
           refreshTable();
         });
         
@@ -267,7 +223,7 @@
           }
           else if (name == 'detail') {
             setCookie('target-id', id, 1);
-            location.href = 'target_update.html';//跳转页面
+            location.href = 'target_detail.html';//跳转页面
           }
           else if (name == 'delete') {
             deleteTargetId = id;
@@ -278,6 +234,8 @@
         $('#confirm').click(function() {
           $('#confirm-delete').modal('hide');
           deleteTarget(deleteTargetId);
+          deleteTargetId = 0;
+          refreshTable();
         });
         
         $('#cancel').click(function() {
@@ -285,47 +243,49 @@
         });
       });
       
-      function refreshTable() {
-        var startDate = $('#start-date').val().split('-');
-        var endDate = $('#end-date').val().split('-');
-        var startTime = $('#start-time').val().split(':');
-        var endTime = $('#end-time').val().split(':');
+      function retrieveTargetCallBackProcess(result) {
+        if (result.errcode >= 0) {
+          var list = result.data.targetlist;
+          buildTable(list);
+        }
+        else {
+          showMessage(result.errmsg);
+        }
+      }
+      
+      function refreshTable() {        
+        var starttime = getFormatJsonStartTime($('#start-date').val());
+        var endtime = getFormatJsonEndTime($('#end-date').val());
         
-        var query = new Object;
-        query.starttime = startDate[0] + startDate[1] + startDate[2] + startTime[0] + startTime[1] + '00';
-        query.endtime = endDate[0] + endDate[1] + endDate[2] + endTime[0] + endTime[1] + '00';
-        
-        var body = JSON.stringify(query);
-        var userId = getCookie('userId');
-        var clientId = getCookie('clientId');
-        var token = getCookie('token');
-        var header = new AjaxHeader(userId, clientId, body, token);
-        $.ajax({
-          type: 'post',
-          url:'http://127.0.0.1:8000/ajax/target/',
-          dataType: 'json',
-          data: body,
-          beforeSend: function(xhr) {
-            setAjaxHeader(xhr, header);
-          },
-          async: false,
-          success: function(result) {
-            if (result.errcode >= 0) {
-              var list = result.data.targetlist;
-              buildTable(list);
-            }
-            else {
-              showMessage(result.errmsg);
-            }
-          },
-          error: function (XMLHttpRequest, textStatus, errorThrown) {
-            var message = "<p>信息提交过程发生异常，请与管理员联系</p>"
-            message += "<p>状态码：" + XMLHttpRequest.status + "</p>"
-            message += "<p>状态：" + XMLHttpRequest.readyState + "</p>"
-            message += "<p>异常信息：" + textStatus + "</p>"
-            showMessage(message);
-          }
-        });
+        if (starttime.length >0 && endtime.length > 0) {
+          var query = new Object;
+          query.starttime = starttime;
+          query.endtime = endtime;
+          var body = JSON.stringify(query);
+          var userId = getCookie('userId');
+          var clientId = getCookie('clientId');
+          var token = getCookie('token');
+          var header = new AjaxHeader(userId, clientId, body, token);
+          var url = baseUrl + 'targetList';
+          callAjax(url, header, body, retrieveTargetCallBackProcess);
+        }
+        else {
+          showMessage("请选择查询日期");
+        }
+      }
+      
+      function deleteTargetCallBackProcess(result) {
+        var message = "<p>删除信息已提交</p>"
+        if (result.errcode >= 0) {
+          message += "<p>信息已删除</>"
+        }
+        else {
+          message += "<p>信息删除失败</p>"
+          message += "<p>";
+          message += result.errmsg;
+          message += "</>"
+        }
+        showMessage(message);
       }
       
       function deleteTarget(id) {
@@ -337,50 +297,20 @@
         var clientId = getCookie('clientId');
         var token = getCookie('token');
         var header = new AjaxHeader(userId, clientId, body, token);
-        
-        $.ajax({
-          type: 'post',
-          url: 'http://127.0.0.1:8000/ajax/target/delete/',
-          dataType: 'json',
-          data: body,
-          beforeSend: function(xhr) {
-            setAjaxHeader(xhr, header);
-          },
-          async: false,
-          success: function(result) {
-            var message = "<p>删除信息已提交</p>"
-            if (result.errcode >= 0) {
-              message += "<p>信息已删除</>"
-            }
-            else {
-              message += "<p>信息删除失败</p>"
-              message += "<p>";
-              message += result.errmsg;
-              message += "</>"
-            }
-            showMessage(message);
-          },
-          error: function (XMLHttpRequest, textStatus, errorThrown) {
-            var message = "<p>信息提交过程发生异常，请与管理员联系</p>"
-            message += "<p>状态码：" + XMLHttpRequest.status + "</p>"
-            message += "<p>状态：" + XMLHttpRequest.readyState + "</p>"
-            message += "<p>异常信息：" + textStatus + "</p>"
-            showMessage(message);
-          }
-        });
+        var url = baseUrl + 'targetDelete';
+        callAjax(url, header, body, deleteTargetCallBackProcess);
       }
       
-      function buildTable(targetlist) {
+      function buildTable(targets) {
         $('#datatable tbody').empty();
-        for (var i = 0; i <= targetlist.length - 1; i++){
+        for (var i = 0; i <= targets.length - 1; i++){
           var content = "<tr>";
-          content += "<td>" + targetlist[i].createTime + "</td>";
-          content += "<td>" + targetlist[i].targetName + "</td>";
-          content += "<td>" + targetlist[i].oper + "</td>";
+          content += "<td>" + getFormatDateTime(targets[i].createTime) + "</td>";
+          content += "<td>" + targets[i].targetName + "</td>";
+          content += "<td>" + targets[i].oper + "</td>";
           content += "<td style=\"padding: 0.25em 1em; margin: 0;\">";
-          content += "<button type=\"button\" class=\"btn btn-primary btn-sm active\" name=\"detail\" value=\"" + targetlist[i].targetID + "\" role=\"button\" aria-pressed=\"true\" style=\"margin: 0;\">查看</a>";
-          content += "<button type=\"button\" class=\"btn btn-primary btn-sm active\" name=\"edit\" value=\"" + targetlist[i].targetID + "\" role=\"button\" aria-pressed=\"true\" style=\"margin: 0;\">修改</a>";
-          content += "<button type=\"button\" class=\"btn btn-primary btn-sm active\" name=\"delete\" value=\"" + targetlist[i].targetID + "\" role=\"button\" aria-pressed=\"true\" style=\"margin: 0;\">删除</a>";
+          content += "<button type=\"button\" class=\"btn btn-primary btn-sm active\" name=\"detail\" value=\"" + targets[i].targetID + "\" role=\"button\" aria-pressed=\"true\" style=\"margin: 0;\">查看</a>";
+          content += "<button type=\"button\" class=\"btn btn-primary btn-sm active\" name=\"delete\" value=\"" + targets[i].targetID + "\" role=\"button\" aria-pressed=\"true\" style=\"margin: 0;\">删除</a>";
           content += "</td>";
           content += "</tr>";
           $('#datatable tbody').append(content);

@@ -1,3 +1,15 @@
+var baseUrl = "http://103.233.5.238:6688/api/v1/sms/";
+//var baseUrl = "http://127.0.0.1:8000/api/v1/sms/";
+
+Array.prototype.in_array = function(value) {
+  for (var i = 0; i < this.length; i++) {
+    if (this[i] == value) {
+      return true;
+    }
+  }
+  return false;
+}
+
 /**
  * 设置cookie
  * @param {string} name  键名
@@ -54,12 +66,47 @@ function getFormatJsonTime(strDate, strTime) {
   else if (arrayTime.length < 2){
     return '';
   }
-  var result = year.toString() + strMonth + strDay + arrayTime[0] + arrayTime[1] + '00';
+  var time = arrayTime[0] + arrayTime[1];
+  if (arrayTime.length == 3) {
+    time += arrayTime[2];
+  }
+  else {
+    time += '00';
+  }
+  var result = year.toString() + strMonth + strDay + time;
   return result;
 }
 
+function getFormatJsonStartTime(strDate) {
+  return getFormatJsonTime(strDate, '00:00:00');
+}
+
+function getFormatJsonEndTime(strDate) {
+  return getFormatJsonTime(strDate, '23:59:59');
+}
+
 function getFormatDateTime(value) {
-  return value.substring(0, 4) + '-' + value.substring(4, 6) + '-' + value.substring(6, 8) + ' ' + value.substring(8, 10) + ':' + value.substring(10, 12) + ':' + value.substring(12, 14)
+  if (value.length > 0) {
+    return value.substring(0, 4) + '-' + value.substring(4, 6) + '-' + value.substring(6, 8) + ' ' + value.substring(8, 10) + ':' + value.substring(10, 12) + ':' + value.substring(12, 14)
+  }
+  else {
+    return value;
+  }
+}
+
+function formatTaskStatus(status) {
+  switch (status) {
+    case -1:
+      return '已取消';
+    case 1:
+      return '正在执行';
+    case 10:
+      return '等待接受取消确认';
+    case 100:
+      return '执行完毕';
+    default:
+      return '未知';
+  }
 }
 
 function showMessage(message) {
@@ -94,7 +141,7 @@ function setAjaxHeader(xhr, header) {
   xhr.setRequestHeader('Content-Type', header.contentType);
 }
 
-function callAjax(url, header, body, successProcess, failedProcess) {
+function callAjax(url, header, body, callBackProcess) {
   $.ajax({
     type: 'post',
     url: url,
@@ -105,12 +152,7 @@ function callAjax(url, header, body, successProcess, failedProcess) {
     },
     async: false,
     success: function(result) {
-      if (result.errcode >= 0) {
-        successProcess(result);
-      }
-      else {
-        failedProcess(result);
-      }
+      callBackProcess(result);
     },
     error: function (XMLHttpRequest, textStatus, errorThrown) {
       var message = "<p>信息提交过程发生异常，请与管理员联系</p>"
@@ -120,6 +162,46 @@ function callAjax(url, header, body, successProcess, failedProcess) {
       showMessage(message);
     }
   });
+}
+
+function callRetrieveAjax(url, header, body, callBackProcess, obj) {
+  $.ajax({
+    type: 'post',
+    url: url,
+    dataType: 'json',
+    data: body,
+    beforeSend: function(xhr) {
+      setAjaxHeader(xhr, header);
+    },
+    async: false,
+    success: function(result) {
+      callBackProcess(result, obj);
+    },
+    error: function (XMLHttpRequest, textStatus, errorThrown) {
+      var message = "<p>信息提交过程发生异常，请与管理员联系</p>"
+      message += "<p>状态码：" + XMLHttpRequest.status + "</p>"
+      message += "<p>状态：" + XMLHttpRequest.readyState + "</p>"
+      message += "<p>异常信息：" + textStatus + "</p>"
+      showMessage(message);
+    }
+  });
+}
+
+function loginCallBackProcess(result) {
+  var errorCode = result.errcode;
+  var errorMessage = result.errmsg;
+
+  if (errorCode >= 0) {
+    setCookie("userId", result.data.userID);
+    setCookie("token", result.data.token);
+    setCookie("clientId", result.data.clientID);
+    location.href = 'task.html';
+  }
+  else {
+    var message = "<p>登录失败</p>";
+    message += "<p>" + result.errmsg + "</p>";
+    showMessage(message);
+  }
 }
 
 function login(userName, password) {
@@ -132,88 +214,42 @@ function login(userName, password) {
   var token = $.sha1(password);
   var header = new AjaxHeader('00000000', '000000', body, token);
 
-  $.ajax({
-    type: 'post',
-    url: 'http://127.0.0.1:8000/ajax/login/',
-    dataType: 'json',
-    data: body,
-    async: false,
-    beforeSend: function(xhr) {
-      setAjaxHeader(xhr, header);
-    },
-    success: function(result) {
-      var errorCode = result.errcode;
-      var errorMessage = result.errmsg;
+  var url = baseUrl + 'login';
+  
+  callAjax(url, header, body, loginCallBackProcess);
+}
 
-      if (errorCode >= 0) {
-        setCookie("userId", result.data.userID);
-        setCookie("token", result.data.token);
-        setCookie("clientId", result.data.clientID);
-        location.href = 'target.html';
-      }
-      else {
-        var message = "<p>登录失败</p>";
-        message += "<p>" + result.errmsg + "</p>";
-        showMessage(message);
-      }
-    },
-    error: function (XMLHttpRequest, textStatus, errorThrown) {
-      var message = "<p>信息提交过程发生异常，请与管理员联系</p>"
-      message += "<p>状态码：" + XMLHttpRequest.status + "</p>"
-      message += "<p>状态：" + XMLHttpRequest.readyState + "</p>"
-      message += "<p>异常信息：" + textStatus + "</p>"
-      showMessage(message);
-    }
-  });
+function logoutCallBackProcess(result) {
+  var errorCode = result.errcode;
+  var errorMessage = result.errmsg;
+
+  if (errorCode >= 0) {
+    deleteCookie("userId");
+    deleteCookie("token");
+    deleteCookie("clientId");
+    location.href = 'login.html';
+  }
+  else {
+    var message = "<p>Logout失败</p>";
+    message += "<p>" + result.errmsg + "</p>";
+    showMessage(message);
+  }
 }
 
 function logout() {
+  var url = baseUrl + 'logout';
+  var query = new Object;
   var body = JSON.stringify(query);
   var userId = getCookie('userId');
   var clientId = getCookie('clientId');
   var token = getCookie('token');
   var header = new AjaxHeader(userId, clientId, '', token);
 
-  $.ajax({
-    type: 'post',
-    url: 'http://127.0.0.1:8000/ajax/logout/',
-    dataType: 'json',
-    //data: body,
-    async: false,
-    beforeSend: function(xhr) {
-      setAjaxHeader(xhr, header);
-    },
-    success: function(result) {
-      var errorCode = result.errcode;
-      var errorMessage = result.errmsg;
+  callAjax(url, header, body, logoutCallBackProcess);
+}
 
-      if (errorCode >= 0) {
-        deleteCookie("userId");
-        deleteCookie("token");
-        deleteCookie("clientId");
-        location.href = 'login.html';
-      }
-      else {
-        var message = "<p>登录失败</p>";
-        message += "<p>" + result.errmsg + "</p>";
-        showMessage(message);
-      }
-    },
-    error: function (XMLHttpRequest, textStatus, errorThrown) {
-      var message = "<p>信息提交过程发生异常，请与管理员联系</p>"
-      message += "<p>状态码：" + XMLHttpRequest.status + "</p>"
-      message += "<p>状态：" + XMLHttpRequest.readyState + "</p>"
-      message += "<p>异常信息：" + textStatus + "</p>"
-      showMessage(message);
-    }
+$(document).ready(function () {
+  $('#logout').click(function() {
+    logout();
   });
-}
-
-Array.prototype.in_array = function(value) {
-  for (var i = 0; i < this.length; i++) {
-    if (this[i] == value) {
-      return true;
-    }
-  }
-  return false;
-}
+});

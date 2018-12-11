@@ -9,19 +9,9 @@
 
     <title>中新生态城</title>
 
-    <!-- Bootstrap -->
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css" rel="stylesheet" media="screen">
-    <!-- Font Awesome -->
-    <link href="./vendors/font-awesome/css/font-awesome.min.css" rel="stylesheet">
-    <!-- NProgress -->
-    <link href="./vendors/nprogress/nprogress.css" rel="stylesheet">
-
-    <!-- bootstrap-daterangepicker -->
-    <link href="./vendors/bootstrap-daterangepicker/daterangepicker.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/css/bootstrap-datepicker3.css"/>
-
-    <!-- Custom Theme Style -->
-    <link href="./build/css/custom.css" rel="stylesheet">
+    <link href="./assets/css/font-awesome.min.css" rel="stylesheet">
+    <link href="./assets/css/custom.css" rel="stylesheet">
     
     <!-- ArcGIS css Begin -->
     <link rel="stylesheet" href="https://js.arcgis.com/3.26/dijit/themes/nihilo/nihilo.css">
@@ -37,7 +27,7 @@
     <script src="https://js.arcgis.com/3.26/"></script>
   </head>
 
-  <body class="nav-md footer_fixed">
+  <body class="nav-md">
     <div class="container body">
       <div class="main_container">
         <div class="col-md-3 left_col menu_fixed">
@@ -49,13 +39,13 @@
                 <ul class="nav side-menu">
                   <li><a><i class="fa fa-group"></i>人口监控分析<span class="fa fa-chevron-down"></span></a>
                   </li>
-                  <li><a><i class="fa fa-wifi"></i>Wi-Fi热点分析<span class="fa fa-chevron-down"></span></a>
+                  <li><a><i class="fa fa-wifi"></i>WiFi热点分析<span class="fa fa-chevron-down"></span></a>
                   </li>
                   <li><a><i class="fa fa-comment-o"></i>公共信息发布<span class="fa fa-chevron-down"></span></a>
                     <ul class="nav child_menu">
-                      <li><a href="general_elements.html">短信发送</a></li>
-                      <li><a href="media_gallery.html">日志查询</a></li>
-                      <li><a href="typography.html">客群管理</a></li>
+                      <li><a href="task_create.html">短信发送</a></li>
+                      <li><a href="task.html">日志查询</a></li>
+                      <li><a href="target.html">客群管理</a></li>
                     </ul>
                   </li>
                 </ul>
@@ -80,7 +70,7 @@
                     <span class=" fa fa-angle-down"></span>
                   </a>
                   <ul class="dropdown-menu dropdown-usermenu pull-right">
-                    <li><a href="login.html"><i class="fa fa-sign-out pull-right"></i>Log Out</a></li>
+                    <li><a id="logout"><i class="fa fa-sign-out pull-right"></i>退出登录</a></li>
                   </ul>
                 </li>
 
@@ -231,46 +221,16 @@
       </div>
     </div>
 
-    <!-- jQuery (for Bootstrap's JavaScript plugins) -->
     <script src="https://code.jquery.com/jquery-1.11.1.min.js"></script>
-    <!-- Include all  plugins or individual files as needed -->
     <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
     
-    <!-- Flot -->
-    <script src="./vendors/Flot/jquery.flot.js"></script>
-    <script src="./vendors/Flot/jquery.flot.pie.js"></script>
-    <script src="./vendors/Flot/jquery.flot.time.js"></script>
-    <script src="./vendors/Flot/jquery.flot.stack.js"></script>
-    <script src="./vendors/Flot/jquery.flot.resize.js"></script>
-    <!-- Flot plugins -->
-    <script src="./vendors/flot.orderbars/js/jquery.flot.orderBars.js"></script>
-    <script src="./vendors/flot-spline/js/jquery.flot.spline.min.js"></script>
-    <script src="./vendors/flot.curvedlines/curvedLines.js"></script>
-    <!-- DateJS -->
-    <script src="./vendors/DateJS/build/date.js"></script>
+    <script src="./assets/js/date.js"></script>
     
-    <script src="./vendors/jQuery-Smart-Wizard/js/jquery.smartWizard.js"></script>
-    <!-- Custom Theme Scripts -->
-    <script src="./build/js/custom.js"></script>
+    <script src="./assets/js/jquery.smartWizard.js"></script>
+
+    <script src="./assets/js/custom.js"></script>
     <script src="./assets/js/jquery.sha1.js"></script>
     <script src="./assets/js/main.js"></script>
-    
-    
-    <!-- FastClick -->
-    <!-- <script src="./vendors/fastclick/lib/fastclick.js"></script> -->
-    <!-- NProgress -->
-    <!-- <script src="./vendors/nprogress/nprogress.js"></script> -->
-    <!-- Chart.js -->
-    <!-- <script src="./vendors/Chart.js/dist/Chart.min.js"></script> -->
-    <!-- jQuery Sparklines -->
-    <!-- <script src="./vendors/jquery-sparkline/dist/jquery.sparkline.min.js"></script> -->
-    
-    <!-- bootstrap-daterangepicker -->
-    <!-- <script src="./vendors/moment/min/moment.min.js"></script> -->
-    <!-- <script src="./vendors/bootstrap-daterangepicker/daterangepicker.js"></script> -->
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/js/bootstrap-datepicker.min.js"></script>
-    
-    
     
     <!-- ArcGIS javascript begin -->
     <script>
@@ -379,9 +339,9 @@
             transferPolygon();
           });
             
-          targetId = getUrlLastNumber();
+          targetId = getTargetId();
           var target = getTargetById(targetId);
-          setFormValue(target.targetName, target.serviceId, target.userInfo);
+          setFormValue(target.targetName, target.userinfo);
           drawMap(target.geoInfo);
         
           function transferPolygon() {
@@ -579,9 +539,8 @@
       );
 
       $(document).ready(function () {
-        //var targetId = getUrlLastNumber();
+        //var targetId = getTargetId();
         
-        //var targetId = 3;
         //var target = getTargetById(targetId);
         $('#commit').click(function(){
           targetCreate();
@@ -597,10 +556,6 @@
         this.polygon = polygon;
       }
       
-      //function geoInfo(polygons) {
-      //  this.polygons = polygons;
-      //}
-      
       function UserInfo(sex, age, roam, resident) {
         this.sex = sex;
         this.age = age;
@@ -608,11 +563,11 @@
         this.resident = resident;
       }
       
-      function Target(Id, targetName, geoInfo, userInfo){
+      function Target(Id, targetName, geoInfo, userinfo){
         this.targetID = Id;
         this.targetName = targetName;
         this.geoInfo = geoInfo;
-        this.userInfo = userInfo;
+        this.userinfo = userinfo;
       }
       
       function buildJsonData() {
@@ -718,19 +673,27 @@
         buildJsonData();
       }
       
-       function isInteger(obj){
-         return  Math.round(obj) === obj   //是整数，则返回true，否则返回false
-       }
-      
-      function getUrlLastNumber()
+      function getTargetId()
       {
-        //var query = location.search.substring(1);//获取查询串
+        //var query = location.search.substring(1);
         //var params = query.match(/(\d+)/g);
         //var stringId = params[params.length-1];
         var stringId = getCookie('target-id');
         var id = parseInt(stringId);
         return id;
-        //Cookies.get('target-id');
+      }
+      
+      function retrieveTargetByIdCallBackProcess(result, obj) {
+        if (result.errcode >= 0) {
+          var data = result.data;
+          obj.targetName = data.targetName;
+          obj.createTime = data.createTime;
+          obj.geoInfo = data.geoInfo;
+          obj.userinfo = data.userinfo;
+        }
+        else {
+          showMessage(result.errmsg);
+        }
       }
       
       function getTargetById(targetId) {
@@ -743,49 +706,17 @@
         var clientId = getCookie('clientId');
         var token = getCookie('token');
         var header = new AjaxHeader(userId, clientId, body, token);
-        $.ajax({
-          type: 'post',
-          url: 'http://127.0.0.1:8000/ajax/target/detail/',
-          dataType: 'json',
-          data: body,
-          beforeSend: function(xhr) {
-            setAjaxHeader(xhr, header);
-          },
-          async: false,
-          success: function(result) {
-            if (result.errcode >= 0) {
-              var data = result.data;
-              target.serviceId = data.serviceID;
-              target.targetName = data.targetName;
-              target.createTime = data.createTime;
-              target.geoInfo = data.geoInfo;
-              target.userInfo = data.userInfo;
-            }
-            else {
-              showMessage(result.errmsg);
-            }
-          },
-          error: function (XMLHttpRequest, textStatus, errorThrown) {
-            var message = "<p>信息提交过程发生异常，请与管理员联系</p>"
-            message += "<p>状态码：" + XMLHttpRequest.status + "</p>"
-            message += "<p>状态：" + XMLHttpRequest.readyState + "</p>"
-            message += "<p>异常信息：" + textStatus + "</p>"
-            showMessage(result.errmsg);
-          }
-        });
-        
+        var url = baseUrl + "targetInfo";
+        callRetrieveAjax(url, header, body, retrieveTargetByIdCallBackProcess, target);
         return target;
       }
       
-      function setFormValue(targetName, serviceId, userInfo) {
-        $("input:checkbox[name=CMCC]").prop("checked", false);
-        $("input:checkbox[name=CUCC]").prop("checked", false);
-        
-        $('#target-name').val(targetName);
-        
-        $("input[name='sex'][value='" + userInfo.sex + "']").prop("checked",true);
-        $("input[name='roam'][value='" + userInfo.roam + "']").prop("checked",true);
-        $("input[name='resident'][value='" + userInfo.resident + "']").prop("checked",true);
+      function setFormValue(targetName, userinfo) {
+        $('#target-name').val(targetName);        
+        $("input[name='sex'][value='" + userinfo.sex + "']").prop("checked",true);
+        $("#age").val(userinfo.age);
+        $("input[name='roam'][value='" + userinfo.roam + "']").prop("checked",true);
+        $("input[name='resident'][value='" + userinfo.resident + "']").prop("checked",true);
         
       }
     </script>

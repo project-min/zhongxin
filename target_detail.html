@@ -11,13 +11,18 @@
 
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css" rel="stylesheet" media="screen">
     <link href="./assets/css/font-awesome.min.css" rel="stylesheet">
-
     <link href="./assets/css/custom.css" rel="stylesheet">
     
     <!-- ArcGIS css Begin -->
     <link rel="stylesheet" href="https://js.arcgis.com/3.26/dijit/themes/nihilo/nihilo.css">
     <link rel="stylesheet" type="text/css" href="http://js.arcgis.com/3.26/esri/css/esri.css">
     <!-- ArcGIS css End -->
+    
+    <style type="text/css">
+      #wizard {
+        font-size: 0.9em;
+      }
+    </style>
     
     <script src="https://js.arcgis.com/3.26/"></script>
   </head>
@@ -67,19 +72,7 @@
                   <ul class="dropdown-menu dropdown-usermenu pull-right">
                     <li><a id="logout"><i class="fa fa-sign-out pull-right"></i>退出登录</a></li>
                   </ul>
-                </li>
-                <!--
-                <li role="presentation" class="dropdown">
-                  <a href="javascript:;" class="dropdown-toggle info-number" data-toggle="dropdown" aria-expanded="false">
-                    <i class="fa fa-bell-o"></i>
-                    <span class="badge bg-green">6</span>
-                  </a>
-                </li>
-                <li role="presentation" class="dropdown">
-                  <a href="javascript:;" class="dropdown-toggle info-number" data-toggle="dropdown" aria-expanded="false">
-                    <i class="fa fa-search"></i>
-                  </a>
-                </li>-->
+                </li> 
               </ul>
             </nav>
           </div>
@@ -96,82 +89,86 @@
                   <div class="clearfix"></div>
                 </div>
                 <div class="x_content">
-                  <div style="padding: 0 0 1em 0; ">
-                    <label for="target-name">客群名称：</label>
-                    <div class="input-group">
-                      <div class="btn-group">
-                        <input type="text" class="form-control" id="target-name" required>
+                  <!-- start form for validation -->
+                  <form>
+                    <div style="padding: 0 0 1em 0; ">
+                      <label for="target-name">客群名称：</label>
+                      <div class="input-group">
+                        <div class="btn-group">
+                          <input type="text" class="form-control" id="target-name" readonly>
+                        </div>
                       </div>
                     </div>
-                  </div>
-                  <div style="padding: 0 0 1em 0; ">
-                    <label for="sex">性别：</label>
-                    <!-- Default inline 1-->
-                    <div class="row">
-                      <div class="col-lg-3">
-                        <input type="radio" name="sex" value="0" checked="checked">
-                        <label>全部</label>
-                      </div>
-                      <div class="col-lg-3">
-                        <input type="radio" name="sex" value="1">
-                        <label>男</label>
-                      </div>
-                      <div class="col-lg-3">
-                        <input type="radio" name="sex" value="2">
-                        <label>女</label>
-                      </div>
-                    </div>
-                  </div>
-                  <div style="padding: 0 0 1em 0; ">
-                    <label for="age">年龄段：</label>
-                      <select id="age" class="custom-select" required>
-                        <option value="0">不限</option>
-                        <option value="1">0-20</option>
-                        <option value="2">21-40</option>
-                        <option value="4">40-60</option>
-                        <option value="8">60以上</option>
-                      </select>
-                  </div>
-                  <div style="padding: 0 0 1em 0; ">
-                    <label for="roam">外省：</label>
-                    <div class="row">
-                      <div class="col-lg-3">
-                        <input type="radio" name="roam" value="0" checked="checked">
-                        <label>否</label>
-                      </div>
-                      <div class="col-lg-3">
-                        <input type="radio" name="roam" value="1">
-                        <label>是</label>
+                    <div style="padding: 0 0 1em 0; ">
+                      <label for="sex">性别：</label>
+                      <!-- Default inline 1-->
+                      <div class="row">
+                        <div class="col-lg-3">
+                          <input type="radio" name="sex" value="0" disabled>
+                          <label>全部</label>
+                        </div>
+                        <div class="col-lg-3">
+                          <input type="radio" name="sex" value="1" disabled>
+                          <label>男</label>
+                        </div>
+                        <div class="col-lg-3">
+                          <input type="radio" name="sex" value="2" disabled>
+                          <label>女</label>
+                        </div>
                       </div>
                     </div>
-                  </div>
-                  <div style="padding: 0 0 1em 0; ">
-                    <label for="resident">居住情况：</label>
-                    <div class="row">
-                      <div class="col-lg-12">
-                        <input type="radio" name="resident" value="0" checked="checked">
-                        <label>全部</label>
-                      </div>
-                      <div class="col-lg-12">
-                        <input type="radio" name="resident" value="1">
-                        <label>常驻人口</label>
-                      </div>
-                      <div class="col-lg-12">
-                        <input type="radio" name="resident" value="2">
-                        <label>非常驻人口</label>
+                    <div style="padding: 0 0 1em 0; ">
+                      <label for="age">年龄段：</label>
+                        <select id="age" class="custom-select" disabled>
+                          <option value="0">不限</option>
+                          <option value="1">0-20</option>
+                          <option value="2">21-40</option>
+                          <option value="4">40-60</option>
+                          <option value="8">60以上</option>
+                        </select>
+                    </div>
+                    <div style="padding: 0 0 1em 0; ">
+                      <label for="roam">外省：</label>
+                      <div class="row">
+                        <div class="col-lg-3">
+                          <input type="radio" name="roam" value="0" disabled>
+                          <label>否</label>
+                        </div>
+                        <div class="col-lg-3">
+                          <input type="radio" name="roam" value="1" disabled>
+                          <label>是</label>
+                        </div>
                       </div>
                     </div>
-                  </div>
+                    <div style="padding: 0 0 1em 0; ">
+                      <label for="resident">居住情况：</label>
+                      <div class="row">
+                        <div class="col-lg-12">
+                          <input type="radio" name="resident" value="0" disabled>
+                          <label>全部</label>
+                        </div>
+                        <div class="col-lg-12">
+                          <input type="radio" name="resident" value="1" disabled>
+                          <label>常驻人口</label>
+                        </div>
+                        <div class="col-lg-12">
+                          <input type="radio" name="resident" value="2" disabled>
+                          <label>非常驻人口</label>
+                        </div>
+                      </div>
+                    </div>
+                  </form>
+                  <!-- end form for validations -->
                   
-                  <div style="border-top: 2px solid #E6E9ED; padding: 0.5em; text-align: right;">
-                    <button type="button" class="btn btn-primary" id="commit">保存</button>
-                  </div>
                 </div>
+                
+                
+                
               </div>
             </div>
             <div class="col-md-9"  id="map-container">
               <div id="map">
-                <button type="button" class="btn btn-default" id="map-confirm" style="position: absolute; z-index: 100; right: 25px; bottom: 15px;">确认</button>
+                <button type="button" class="btn btn-default" id="map-confirm" style="position: absolute; z-index: 100; right: 25px; bottom: 15px; visibility: hidden;">确认</button>
               </div>
               
             </div>
@@ -182,35 +179,38 @@
         <div class="modal fade" tabindex="-1" role="dialog" id="error-message">
           <div class="modal-dialog" role="document">
             <div class="modal-content">
-              <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title">信息</h4>
-              </div>
-              <div class="modal-body" id="modal-message">
-                <p></p>
-              </div>
-              <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
-              </div>
+            <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+              <h4 class="modal-title">信息</h4>
             </div>
-          </div>
-        </div>
-        <!--
+            <div class="modal-body" id="modal-message">
+              <p></p>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+          </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+      </div><!-- /.modal -->
+        
+        <!-- footer content -->
         <footer>
           <div class="pull-right">
             中新生态城 <a href="https://colorlib.com"></a>
           </div>
           <div class="clearfix"></div>
-        </footer>-->
+        </footer>
+        <!-- /footer content -->
+        
       </div>
     </div>
 
     <script src="https://code.jquery.com/jquery-1.11.1.min.js"></script>
     <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
-    <script src="./assets/js/jquery.smartWizard.js"></script>
+
     <script src="./assets/js/custom.js"></script>
-    <script src="./assets/js/main.js"></script>
     <script src="./assets/js/jquery.sha1.js"></script>
+    <script src="./assets/js/main.js"></script>
     
     <script>
       var groupId;
@@ -221,12 +221,19 @@
       var noDistrub;
       var messageTitle;
       var messageConent;
-      var polygons = [];
+      
+      var task;
       
       var map;
       var toolbar;
+
       var editToolbar;
 
+      var polygons = [];
+      
+      var jsonData;
+      
+      var targetId;
 
       require(
         ["esri/map",
@@ -295,7 +302,7 @@
                                 xmax:ext.xmax,
                                 ymax:ext.ymax})
           });
-
+          
           var tiledLayer = new ArcGISTiledMapServiceLayer(
             "https://server.arcgisonline.com/arcgis/rest/services/World_Street_Map/MapServer", 
             { spatialReference: sr }
@@ -304,12 +311,17 @@
           map.addLayer(tiledLayer);
 
           map.on("load", function() {
-            createToolbarAndContextMenu();
+            //createToolbarAndContextMenu();
           });          
 
           on(dom.byId("map-confirm"), "click", function(evt){
             transferPolygon();
           });
+            
+          targetId = getTargetId();
+          var target = getTargetById(targetId);
+          setFormValue(target.targetName, target.userinfo);
+          drawMap(target.geoInfo);
         
           function transferPolygon() {
             var convertPolygons = [];
@@ -330,14 +342,10 @@
                 for(var i = 0; i < result.length; i++) {
                   var points = []
                   for (var j = 0; j < result[i].rings[0].length; j++) {
-                    var pt = new Object;
-                    
-                    pt.lng = result[i].rings[0][j][0];
-                    pt.lat = result[i].rings[0][j][1];
+                    var pt = new point(result[i].rings[0][j][0], result[i].rings[0][j][1]);
                     points.push(pt);
                   }
-                  var pg = new Object;
-                  pg.polygon = points;
+                  var pg = new graphic(points);
                   polygons.push(pg);
                 }
                 //console.log(polygons);
@@ -361,6 +369,46 @@
             var graphic = new Graphic(evt.geometry, symbol);
 
             map.graphics.add(graphic);
+          }
+
+          function drawMap(geoInfo) {
+            console.log("draw poly");
+            var latOffset, lonOffset, center, lat, lon, points;
+            
+            for (var i = 0; i < geoInfo[0].polygons.length; i ++) {
+              var points = []
+              var polygon = geoInfo[0].polygons[i].polygon;
+              for (var j = 0; j < polygon.length; j++) {
+                points.push([polygon[j].lng, polygon[j].lat]);
+              }
+              // Create a Green Polygon
+              //var points1 = [
+              //  [117.18244762388206,39.13429536101209],
+              //  [117.18193264039091,39.133363288260526],
+              //  [117.18094558682807,39.134062343980844],
+              //  [117.18244762388206,39.13429536101209]
+              //];
+              drawPolygon(points);
+            }
+            
+            
+          }
+            
+          function drawPolygon(points) {
+            var polygon = new esri.geometry.Polygon();
+            polygon.addRing(points);
+            polygon.spatialReference = sr;
+
+            console.log("created poly geom");
+
+            // Add the polygon to map
+            var symbol = new esri.symbol.SimpleFillSymbol().setStyle(esri.symbol.SimpleFillSymbol.STYLE_SOLID);
+            polygonGraphic = new esri.Graphic(polygon, symbol, { keeper: true });
+            map.graphics.add(polygonGraphic);
+            //var polyLayer = new esri.layers.GraphicsLayer({ id: "poly" });
+            //map.addLayer(polyLayer);
+            //polyLayer.add(polygonGraphic);
+            console.log("added poly graphic");
           }
         
           function createToolbarAndContextMenu() {
@@ -470,12 +518,39 @@
       );
 
       $(document).ready(function () {
+        //var targetId = getTargetId();
+        
+        //var target = getTargetById(targetId);
         $('#commit').click(function(){
-          createTarget();
+          targetCreate();
         })
       });
       
-      function buildTarget() {
+      function point(lng, lat) {
+        this.lng = lng;
+        this.lat = lat;
+      }
+      
+      function graphic(polygon) {
+        this.polygon = polygon;
+      }
+      
+      function UserInfo(sex, age, roam, resident) {
+        this.sex = sex;
+        this.age = age;
+        this.roam = roam;
+        this.resident = resident;
+      }
+      
+      function Target(Id, targetName, geoInfo, userinfo){
+        this.targetID = Id;
+        this.targetName = targetName;
+        this.geoInfo = geoInfo;
+        this.userinfo = userinfo;
+      }
+      
+      function buildJsonData() {
+        $('#modal-message').empty();
         var geos =[];
         var errorMessage = '';
         var strName = $('#target-name').val();
@@ -495,8 +570,10 @@
         
         var age = parseInt(strAge);
         if (isInteger(age)) {
-          if (age < 0 || age > 8) {
-            errorMessage += "<p>年龄选择发生错误；</p>";
+          {
+            if (age < 0 || age > 8) {
+              errorMessage += "<p>年龄选择发生错误；</p>";
+            }
           }
         }
         else {
@@ -518,54 +595,110 @@
         }
         
         if (errorMessage.length > 0) {
-          showMessage(errorMessage);
-          return null;
+          $('#modal-message').append(errorMessage);
+          $('#error-message').modal();
         }
         else {
-          var t = new Object;
+        
           var name = strName;
-          var userInfo = new Object;
-          userInfo.sex = sex;
-          userInfo.age = age;
-          userInfo.roam = roam;
-          userInfo.resident = resident;
+          var user = new UserInfo(sex, age, roam, resident);
+          var serviceId = 0;
           var graphics = new Object;
           graphics.polygons = polygons;
           geos.push(graphics);
           
-          t.targetName = name;
-          t.geoInfo = geos;
-          t.userinfo = userInfo;
-          return t;
-        }
-      }
-      
-      function createTargetCallBackProcess(result) {
-        var message = "<p>新客群信息已提交</p>"
-        if (result.errcode >= 0) {
-          message += "<p>信息已保存</>"
-        }
-        else {
-          message += "<p>信息保存失败</p>"
-          message += "<p>";
-          message += result.errmsg;
-          message += "</>"
-        }
-        showMessage(message);
-      }
-      
-      function createTarget() {
-        var target = buildTarget();
-        if (target != null) {
-          var body = JSON.stringify(target);
+          t = new Target(targetId, name, geos, user);
+          var body = JSON.stringify(t);
           var userId = getCookie('userId');
           var clientId = getCookie('clientId');
           var token = getCookie('token');
           var header = new AjaxHeader(userId, clientId, body, token);
-          var url = baseUrl + 'targetCreate';
-          callAjax(url, header, body, createTargetCallBackProcess);
+          $.ajax({
+            type: 'post',
+            url:'http://127.0.0.1:8000/ajax/target/update/',
+            dataType: 'json',
+            data: body,
+            beforeSend: function(xhr) {
+              setAjaxHeader(xhr, header);
+            },
+            async: false,
+            success: function(result) {
+              var message = "<p>客群修改信息已提交</p>"
+              if (result.errcode >= 0) {
+                message += "<p>信息已保存</>"
+              }
+              else {
+                message += "<p>信息保存失败</p>"
+                message += "<p>";
+                message += data.message;
+                message += "</>"
+              }
+              $('#modal-message').append(message);
+              $('#error-message').modal();
+            },
+            error: function (XMLHttpRequest, textStatus, errorThrown) {
+              var message = "<p>信息提交过程发生异常，请与管理员联系</p>"
+              message += "<p>状态码：" + XMLHttpRequest.status + "</p>"
+              message += "<p>状态：" + XMLHttpRequest.readyState + "</p>"
+              message += "<p>异常信息：" + textStatus + "</p>"
+              $('#modal-message').append(message);
+              $('#error-message').modal();
+            }
+          });
         }
       }
+      
+      function targetCreate(){
+        buildJsonData();
+      }
+      
+      function getTargetId()
+      {
+        //var query = location.search.substring(1);
+        //var params = query.match(/(\d+)/g);
+        //var stringId = params[params.length-1];
+        var stringId = getCookie('target-id');
+        var id = parseInt(stringId);
+        return id;
+      }
+      
+      function retrieveTargetByIdCallBackProcess(result, obj) {
+        if (result.errcode >= 0) {
+          var data = result.data;
+          obj.targetName = data.targetName;
+          obj.createTime = data.createTime;
+          obj.geoInfo = data.geoInfo;
+          obj.userinfo = data.userinfo;
+        }
+        else {
+          showMessage(result.errmsg);
+        }
+      }
+      
+      function getTargetById(targetId) {
+        var target = new Object;
+        var query = new Object;
+        
+        query.targetID = targetId.toString();
+        var body = JSON.stringify(query);
+        var userId = getCookie('userId');
+        var clientId = getCookie('clientId');
+        var token = getCookie('token');
+        var header = new AjaxHeader(userId, clientId, body, token);
+        var url = baseUrl + "targetInfo";
+        callRetrieveAjax(url, header, body, retrieveTargetByIdCallBackProcess, target);
+        return target;
+      }
+      
+      function setFormValue(targetName, userinfo) {
+        $('#target-name').val(targetName);        
+        $("input[name='sex'][value='" + userinfo.sex + "']").prop("checked",true);
+        $("#age").val(userinfo.age);
+        $("input[name='roam'][value='" + userinfo.roam + "']").prop("checked",true);
+        $("input[name='resident'][value='" + userinfo.resident + "']").prop("checked",true);
+        
+      }
     </script>
+    
   </body>
 </html>
