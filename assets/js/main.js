@@ -1,4 +1,4 @@
-var baseUrl = "http://103.233.5.238:6688/api/v1/sms/";
+var baseUrl = "https://103.233.5.238:6688/api/v1/sms/";
 //var baseUrl = "http://127.0.0.1:8000/api/v1/sms/";
 
 Array.prototype.in_array = function(value) {
