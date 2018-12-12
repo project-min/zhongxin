@@ -1,0 +1,55 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no">
+    <title>Load SQEco Map</title>
+
+    <link rel="stylesheet" href="http://10.254.11.101:8080/arcgis_js/arcgis_js_api/library/3.12/3.12/esri/css/esri.css">
+    <script src="http://10.254.11.101:8080/arcgis_js/arcgis_js_api/library/3.12/3.12/init.js"></script>
+
+    <style>
+      html,
+      body,
+      #map {
+        padding: 0;
+        margin: 0;
+        height: 100%;
+        width: 100%;
+      }
+    </style>
+
+    <script>
+      var m_divName = 'map';//界面div的id
+      require(["esri/map","esri/graphic",
+               "esri/layers/GraphicsLayer",
+               "esri/geometry/Extent",
+               "esri/layers/ArcGISTiledMapServiceLayer"], 
+        function(Map, Graphic,GraphicsLayer, Extent, ArcGISTiledMapServiceLayer, GraphicsLayer ) {
+          var ext = {"xmin": 117.67255102256046,
+                     "ymin": 39.06648939147723, 
+                     "xmax": 117.91507758557971,
+                     "ymax": 39.2233553582866};//设置地图范围
+
+          esri.config.defaults.io.corsDetection = false;
+          map = new Map(m_divName, {
+            //nav:true,//8个pan 箭头
+            slider:false,//左上的缩放 +/-;
+            logo:false,//右下的esri logo
+            showAttribution:false,//右下的gisNeu (logo左侧)
+            extent: new Extent({xmin:ext.xmin, ymin:ext.ymin, xmax:ext.xmax, ymax:ext.ymax})
+          });
+
+          var tms = new ArcGISTiledMapServiceLayer("http://10.254.11.105:8399/arcgis/rest/services/SQEcoMap/MapServer");
+          tms.setVisibleLayers([0]);
+          map.addLayer(tms);
+        }
+      );
+    </script>
+  </head>
+
+  <body>
+    <div id="map"></div>
+  </body>
+
+</html>
