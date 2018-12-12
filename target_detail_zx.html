@@ -1,0 +1,703 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <!-- Meta, title, CSS, favicons, etc. -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>中新生态城</title>
+
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css" rel="stylesheet" media="screen">
+    <link href="./assets/css/font-awesome.min.css" rel="stylesheet">
+    <link href="./assets/css/custom.css" rel="stylesheet">
+    
+    <!-- ArcGIS css Begin -->
+    <link rel="stylesheet" href="http://10.254.11.101:8080/arcgis_js/arcgis_js_api/library/3.12/3.12/dijit/themes/nihilo/nihilo.css">
+    <link rel="stylesheet" type="text/css" href="http://10.254.11.101:8080/arcgis_js/arcgis_js_api/library/3.12/3.12/esri/css/esri.css">
+    
+    <!-- ArcGIS css End -->
+    
+    <script src="http://10.254.11.101:8080/arcgis_js/arcgis_js_api/library/3.12/3.12/init.js"></script>
+    
+    <style type="text/css">
+      #wizard {
+        font-size: 0.9em;
+      }
+    </style>
+
+  </head>
+
+  <body class="nav-md">
+    <div class="container body">
+      <div class="main_container">
+        <div class="col-md-3 left_col menu_fixed">
+          <div class="left_col scroll-view">
+            <!-- sidebar menu -->
+            <div id="sidebar-menu" class="main_menu_side hidden-print main_menu">
+              <div class="menu_section">
+                <h3></h3>
+                <ul class="nav side-menu">
+                  <li><a><i class="fa fa-group"></i>人口监控分析<span class="fa fa-chevron-down"></span></a>
+                  </li>
+                  <li><a><i class="fa fa-wifi"></i>WiFi热点分析<span class="fa fa-chevron-down"></span></a>
+                  </li>
+                  <li><a><i class="fa fa-comment-o"></i>公共信息发布<span class="fa fa-chevron-down"></span></a>
+                    <ul class="nav child_menu">
+                      <li><a href="task_create_zx.html">短信发送</a></li>
+                      <li><a href="task_zx.html">日志查询</a></li>
+                      <li><a href="target_zx.html">客群管理</a></li>
+                    </ul>
+                  </li>
+                </ul>
+              </div>
+            </div>
+            <!-- /sidebar menu -->
+          </div>
+        </div>
+
+        <!-- top navigation -->
+        <div class="top_nav">
+          <div class="nav_menu">
+            <nav>
+              <div class="nav toggle">
+                <a id="menu_toggle"><i class="fa fa-bars"></i></a>
+              </div>
+
+              <ul class="nav navbar-nav navbar-right">
+                <li class="">
+                  <a href="javascript:;" class="user-profile dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+                    用户名
+                    <span class=" fa fa-angle-down"></span>
+                  </a>
+                  <ul class="dropdown-menu dropdown-usermenu pull-right">
+                    <li><a id="logout"><i class="fa fa-sign-out pull-right"></i>退出登录</a></li>
+                  </ul>
+                </li> 
+              </ul>
+            </nav>
+          </div>
+        </div>
+        <!-- /top navigation -->
+
+        <!-- page content -->
+        <div class="right_col" role="main" >
+          <div class="row">
+            <div class="col-md-3 col-sm-3 col-xs-3">
+              <div class="x_panel">
+                <div class="x_title">
+                  <h5>客群设置</h5>
+                  <div class="clearfix"></div>
+                </div>
+                <div class="x_content">
+                  <!-- start form for validation -->
+                  <form>
+                    <div style="padding: 0 0 1em 0; ">
+                      <label for="target-name">客群名称：</label>
+                      <div class="input-group">
+                        <div class="btn-group">
+                          <input type="text" class="form-control" id="target-name" readonly>
+                        </div>
+                      </div>
+                    </div>
+                    <div style="padding: 0 0 1em 0; ">
+                      <label for="sex">性别：</label>
+                      <!-- Default inline 1-->
+                      <div class="row">
+                        <div class="col-lg-3">
+                          <input type="radio" name="sex" value="0" disabled>
+                          <label>全部</label>
+                        </div>
+                        <div class="col-lg-3">
+                          <input type="radio" name="sex" value="1" disabled>
+                          <label>男</label>
+                        </div>
+                        <div class="col-lg-3">
+                          <input type="radio" name="sex" value="2" disabled>
+                          <label>女</label>
+                        </div>
+                      </div>
+                    </div>
+                    <div style="padding: 0 0 1em 0; ">
+                      <label for="age">年龄段：</label>
+                        <select id="age" class="custom-select" disabled>
+                          <option value="0">不限</option>
+                          <option value="1">0-20</option>
+                          <option value="2">21-40</option>
+                          <option value="4">40-60</option>
+                          <option value="8">60以上</option>
+                        </select>
+                    </div>
+                    <div style="padding: 0 0 1em 0; ">
+                      <label for="roam">外省：</label>
+                      <div class="row">
+                        <div class="col-lg-3">
+                          <input type="radio" name="roam" value="0" disabled>
+                          <label>否</label>
+                        </div>
+                        <div class="col-lg-3">
+                          <input type="radio" name="roam" value="1" disabled>
+                          <label>是</label>
+                        </div>
+                      </div>
+                    </div>
+                    <div style="padding: 0 0 1em 0; ">
+                      <label for="resident">居住情况：</label>
+                      <div class="row">
+                        <div class="col-lg-12">
+                          <input type="radio" name="resident" value="0" disabled>
+                          <label>全部</label>
+                        </div>
+                        <div class="col-lg-12">
+                          <input type="radio" name="resident" value="1" disabled>
+                          <label>常驻人口</label>
+                        </div>
+                        <div class="col-lg-12">
+                          <input type="radio" name="resident" value="2" disabled>
+                          <label>非常驻人口</label>
+                        </div>
+                      </div>
+                    </div>
+                  </form>
+                  <!-- end form for validations -->
+                  
+                </div>
+                
+                
+                
+              </div>
+            </div>
+            <div class="col-md-9"  id="map-container">
+              <div id="map">
+                <button type="button" class="btn btn-default" id="map-confirm" style="position: absolute; z-index: 100; right: 25px; bottom: 15px; visibility: hidden;">确认</button>
+              </div>
+              
+            </div>
+          </div>
+        </div>
+        <!-- /page content -->
+        
+        <div class="modal fade" tabindex="-1" role="dialog" id="error-message">
+          <div class="modal-dialog" role="document">
+            <div class="modal-content">
+            <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+              <h4 class="modal-title">信息</h4>
+            </div>
+            <div class="modal-body" id="modal-message">
+              <p></p>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+          </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+      </div><!-- /.modal -->
+        
+        <!-- footer content -->
+        <footer>
+          <div class="pull-right">
+            中新生态城 <a href="https://colorlib.com"></a>
+          </div>
+          <div class="clearfix"></div>
+        </footer>
+        <!-- /footer content -->
+        
+      </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-1.11.1.min.js"></script>
+    <script src="assets/js/bootstrap.min.js"></script>
+
+    <script src="./assets/js/custom.js"></script>
+    <script src="./assets/js/jquery.sha1.js"></script>
+    <script src="./assets/js/main.js"></script>
+    
+    <script>
+      var groupId;
+      var taskName;
+      var beginDate;
+      var endDate;
+      var maxAmount;
+      var noDistrub;
+      var messageTitle;
+      var messageConent;
+      
+      var task;
+      
+      var map;
+      var toolbar;
+
+      var editToolbar;
+
+      var polygons = [];
+      
+      var jsonData;
+      
+      var targetId;
+
+      require(
+        ["esri/map",
+         "esri/toolbars/draw",
+         "esri/toolbars/edit",
+         "esri/graphic",
+         "esri/geometry/Polygon",
+         "esri/layers/ArcGISTiledMapServiceLayer",
+         "esri/geometry/Extent",
+         "esri/geometry/Point",
+         "esri/SpatialReference",
+         "esri/symbols/SimpleFillSymbol",
+         "esri/symbols/SimpleLineSymbol",
+         "esri/Color",
+         "esri/tasks/GeometryService",
+         "esri/tasks/ProjectParameters",
+         "dijit/registry",
+         "dijit/Menu",
+         "dijit/MenuItem",
+         "dijit/MenuSeparator",
+         "dijit/form/Button",
+         "dojo/parser",
+         "dojo/on",
+         "dojo/dom",
+         "dojo/domReady!"],
+        function(
+          Map,
+          Draw,
+          Edit,
+          Graphic,
+          Polygon,
+          ArcGISTiledMapServiceLayer,
+          Extent,
+          Point,
+          SpatialReference,
+          SimpleFillSymbol,
+          SimpleLineSymbol,
+          Color,
+          GeometryService,
+          ProjectParameters,
+          registry,                 
+          Menu,
+          MenuItem,
+          MenuSeparator,
+          Button,
+          parser,
+          on,
+          dom) {
+            
+          parser.parse();
+            
+          var sr = new SpatialReference(4326);
+          var ext = {"xmin":117.67255102256046,
+                     "ymin":39.06648939147723,
+                     "xmax":117.91507758557971,
+                     "ymax":39.2233553582866};
+        
+          var geometryService = new GeometryService("https://utility.arcgisonline.com/ArcGIS/rest/services/Geometry/GeometryServer");
+
+          var map = new Map("map", {
+		    logo:false,//右下的esri logo
+		    showAttribution:false,//右下的gisNeu (logo左侧)
+            autoResize: true,
+            extent: new Extent({xmin:ext.xmin,
+                                ymin:ext.ymin,
+                                xmax:ext.xmax,
+                                ymax:ext.ymax})
+          });
+          
+          var tiledLayer = ArcGISTiledMapServiceLayer("http://10.254.11.105:8399/arcgis/rest/services/SQEcoMap/MapServer", { spatialReference: sr });        
+          
+          map.addLayer(tiledLayer);
+
+          map.on("load", function() {
+            //createToolbarAndContextMenu();
+          });          
+
+          on(dom.byId("map-confirm"), "click", function(evt){
+            transferPolygon();
+          });
+            
+          targetId = getTargetId();
+          var target = getTargetById(targetId);
+          setFormValue(target.targetName, target.userinfo);
+          drawMap(target.geoInfo);
+        
+          function transferPolygon() {
+            var convertPolygons = [];
+            polygons = [];
+            
+            var length = map.graphics.graphics.length;
+
+            for (var i = 0; i < length; i++) {
+              var py = new Polygon(new SpatialReference(map.graphics.graphics[i].geometry.spatialReference.wkid));
+              py.rings = map.graphics.graphics[i].geometry.rings;
+              py.type = map.graphics.graphics[i].geometry.type;
+              if (py.type.toLowerCase() == "polygon") {
+                convertPolygons.push(py);
+              }
+            }
+            if (convertPolygons.length > 0) {
+              var project = geometryService.project(convertPolygons, sr, function(result) {
+                for(var i = 0; i < result.length; i++) {
+                  var points = []
+                  for (var j = 0; j < result[i].rings[0].length; j++) {
+                    var pt = new point(result[i].rings[0][j][0], result[i].rings[0][j][1]);
+                    points.push(pt);
+                  }
+                  var pg = new graphic(points);
+                  polygons.push(pg);
+                }
+                //console.log(polygons);
+                alert("选择区域已确认");
+              });
+            }
+            else {
+              alert("选择区域为空");
+            }
+            //console.log(polygons);
+          }
+
+          function addToMap(evt) {
+            var symbol;
+            toolbar.deactivate();
+            map.showZoomSlider();
+            //symbol = new SimpleFillSymbol();
+            symbol = new SimpleFillSymbol(SimpleFillSymbol.STYLE_SOLID, 
+              new SimpleLineSymbol(SimpleLineSymbol.STYLE_SOLID, new Color([98,194,204]), 2), new Color([98,194,204,0.5])
+            );
+            var graphic = new Graphic(evt.geometry, symbol);
+
+            map.graphics.add(graphic);
+          }
+
+          function drawMap(geoInfo) {
+            console.log("draw poly");
+            var latOffset, lonOffset, center, lat, lon, points;
+            
+            for (var i = 0; i < geoInfo[0].polygons.length; i ++) {
+              var points = []
+              var polygon = geoInfo[0].polygons[i].polygon;
+              for (var j = 0; j < polygon.length; j++) {
+                points.push([polygon[j].lng, polygon[j].lat]);
+              }
+              // Create a Green Polygon
+              //var points1 = [
+              //  [117.18244762388206,39.13429536101209],
+              //  [117.18193264039091,39.133363288260526],
+              //  [117.18094558682807,39.134062343980844],
+              //  [117.18244762388206,39.13429536101209]
+              //];
+              drawPolygon(points);
+            }
+            
+            
+          }
+            
+          function drawPolygon(points) {
+            var polygon = new esri.geometry.Polygon();
+            polygon.addRing(points);
+            polygon.spatialReference = sr;
+
+            console.log("created poly geom");
+
+            // Add the polygon to map
+            var symbol = new esri.symbol.SimpleFillSymbol().setStyle(esri.symbol.SimpleFillSymbol.STYLE_SOLID);
+            polygonGraphic = new esri.Graphic(polygon, symbol, { keeper: true });
+            map.graphics.add(polygonGraphic);
+            //var polyLayer = new esri.layers.GraphicsLayer({ id: "poly" });
+            //map.addLayer(polyLayer);
+            //polyLayer.add(polygonGraphic);
+            console.log("added poly graphic");
+          }
+        
+          function createToolbarAndContextMenu() {
+            toolbar = new Draw(map);
+            toolbar.on("draw-end", addToMap);
+            
+            // Create and setup editing tools
+            editToolbar = new Edit(map);
+
+            map.on("click", function(evt) {
+              editToolbar.deactivate();
+            });
+
+            createMapMenu();
+            createGraphicsMenu();
+          }
+
+          function createMapMenu() {
+            // Creates right-click context menu for map
+            var ctxMenuForMap = new Menu({
+              onOpen: function(box) {
+                // Lets calculate the map coordinates where user right clicked.
+                // We'll use this to create the graphic when the user clicks
+                // on the menu item to "Add Point"
+                currentLocation = getMapPointFromMenuPosition(box);          
+                editToolbar.deactivate();
+              }
+            });
+
+            ctxMenuForMap.addChild(new MenuItem({ 
+              label: "新区域",
+              onClick: function() {
+                toolbar.activate(Draw["POLYGON"]);
+                map.hideZoomSlider();
+              }
+            }));
+
+            ctxMenuForMap.startup();
+            ctxMenuForMap.bindDomNode(map.container);
+          }
+
+          function createGraphicsMenu() {
+            // Creates right-click context menu for GRAPHICS
+            var ctxMenuForGraphics = new Menu({});
+            ctxMenuForGraphics.addChild(new MenuItem({ 
+              label: "编辑",
+              onClick: function() {
+                if ( selected.geometry.type !== "point" ) {
+                  editToolbar.activate(Edit.EDIT_VERTICES, selected);
+                } else {
+                  alert("Not implemented");
+                }
+              } 
+            }));
+
+            ctxMenuForGraphics.addChild(new MenuItem({ 
+              label: "移动",
+              onClick: function() {
+                editToolbar.activate(Edit.MOVE, selected);
+              } 
+            }));
+          
+            ctxMenuForGraphics.addChild(new MenuSeparator());
+            ctxMenuForGraphics.addChild(new MenuItem({ 
+              label: "删除",
+              onClick: function() {
+                map.graphics.remove(selected);
+              }
+            }));
+
+            ctxMenuForGraphics.startup();
+
+            map.graphics.on("mouse-over", function(evt) {
+              // We'll use this "selected" graphic to enable editing tools
+              // on this graphic when the user click on one of the tools
+              // listed in the menu.
+              selected = evt.graphic;
+
+              // Let's bind to the graphic underneath the mouse cursor           
+              ctxMenuForGraphics.bindDomNode(evt.graphic.getDojoShape().getNode());
+            });
+
+            map.graphics.on("mouse-out", function(evt) {
+              ctxMenuForGraphics.unBindDomNode(evt.graphic.getDojoShape().getNode());
+            });
+          }
+
+          function getMapPointFromMenuPosition(box) {
+            var x = box.x, y = box.y;
+            switch( box.corner ) {
+              case "TR":
+                x += box.w;
+                break;
+              case "BL":
+                y += box.h;
+                break;
+              case "BR":
+                x += box.w;
+                y += box.h;
+                break;
+            }
+
+            var screenPoint = new Point(x - map.position.x, y - map.position.y);
+            return map.toMap(screenPoint);
+          }
+        }
+      );
+
+      $(document).ready(function () {
+        //var targetId = getTargetId();
+        
+        //var target = getTargetById(targetId);
+        $('#commit').click(function(){
+          targetCreate();
+        })
+      });
+      
+      function point(lng, lat) {
+        this.lng = lng;
+        this.lat = lat;
+      }
+      
+      function graphic(polygon) {
+        this.polygon = polygon;
+      }
+      
+      function UserInfo(sex, age, roam, resident) {
+        this.sex = sex;
+        this.age = age;
+        this.roam = roam;
+        this.resident = resident;
+      }
+      
+      function Target(Id, targetName, geoInfo, userinfo){
+        this.targetID = Id;
+        this.targetName = targetName;
+        this.geoInfo = geoInfo;
+        this.userinfo = userinfo;
+      }
+      
+      function buildJsonData() {
+        $('#modal-message').empty();
+        var geos =[];
+        var errorMessage = '';
+        var strName = $('#target-name').val();
+        var strSex = $("input[name='sex']:checked").val();
+        var strAge = $("#age").val();
+        var strRoam = $("input[name='roam']:checked").val();
+        var strResident = $("input[name='resident']:checked").val();
+        
+        if (strName.length <= 0) {
+          errorMessage += "<p>客群名称不能为空；</p>";
+        }
+        
+        var sex = parseInt(strSex);
+        if (sex != 0 && sex != 1 && sex != 2) {
+          errorMessage += "<p>性别选择发生错误；</p>";
+        }
+        
+        var age = parseInt(strAge);
+        if (isInteger(age)) {
+          {
+            if (age < 0 || age > 8) {
+              errorMessage += "<p>年龄选择发生错误；</p>";
+            }
+          }
+        }
+        else {
+          errorMessage += "<p>年龄选择发生错误；</p>";
+        }
+        
+        var roam = parseInt(strRoam);
+        if (roam != 0 && roam != 1) {
+          errorMessage += "<p>外省选择发生错误；</p>";
+        }
+        
+        var resident = parseInt(strResident);
+        if (resident != 0 && resident != 1 && resident != 2) {
+          errorMessage += "<p>常驻人口选择发生错误；</p>";
+        }
+        
+        if (polygons.length <= 0) {
+          errorMessage += "<p>未选择地图区域；若已选择请点击地图上的确认按钮确认修改；</p>";
+        }
+        
+        if (errorMessage.length > 0) {
+          $('#modal-message').append(errorMessage);
+          $('#error-message').modal();
+        }
+        else {
+        
+          var name = strName;
+          var user = new UserInfo(sex, age, roam, resident);
+          var serviceId = 0;
+          var graphics = new Object;
+          graphics.polygons = polygons;
+          geos.push(graphics);
+          
+          t = new Target(targetId, name, geos, user);
+          var body = JSON.stringify(t);
+          var userId = getCookie('userId');
+          var clientId = getCookie('clientId');
+          var token = getCookie('token');
+          var header = new AjaxHeader(userId, clientId, body, token);
+          $.ajax({
+            type: 'post',
+            url:'http://127.0.0.1:8000/ajax/target/update/',
+            dataType: 'json',
+            data: body,
+            beforeSend: function(xhr) {
+              setAjaxHeader(xhr, header);
+            },
+            async: false,
+            success: function(result) {
+              var message = "<p>客群修改信息已提交</p>"
+              if (result.errcode >= 0) {
+                message += "<p>信息已保存</>"
+              }
+              else {
+                message += "<p>信息保存失败</p>"
+                message += "<p>";
+                message += data.message;
+                message += "</>"
+              }
+              $('#modal-message').append(message);
+              $('#error-message').modal();
+            },
+            error: function (XMLHttpRequest, textStatus, errorThrown) {
+              var message = "<p>信息提交过程发生异常，请与管理员联系</p>"
+              message += "<p>状态码：" + XMLHttpRequest.status + "</p>"
+              message += "<p>状态：" + XMLHttpRequest.readyState + "</p>"
+              message += "<p>异常信息：" + textStatus + "</p>"
+              $('#modal-message').append(message);
+              $('#error-message').modal();
+            }
+          });
+        }
+      }
+      
+      function targetCreate(){
+        buildJsonData();
+      }
+      
+      function getTargetId()
+      {
+        //var query = location.search.substring(1);
+        //var params = query.match(/(\d+)/g);
+        //var stringId = params[params.length-1];
+        var stringId = getCookie('target-id');
+        var id = parseInt(stringId);
+        return id;
+      }
+      
+      function retrieveTargetByIdCallBackProcess(result, obj) {
+        if (result.errcode >= 0) {
+          var data = result.data;
+          obj.targetName = data.targetName;
+          obj.createTime = data.createTime;
+          obj.geoInfo = data.geoInfo;
+          obj.userinfo = data.userinfo;
+        }
+        else {
+          showMessage(result.errmsg);
+        }
+      }
+      
+      function getTargetById(targetId) {
+        var target = new Object;
+        var query = new Object;
+        
+        query.targetID = targetId.toString();
+        var body = JSON.stringify(query);
+        var userId = getCookie('userId');
+        var clientId = getCookie('clientId');
+        var token = getCookie('token');
+        var header = new AjaxHeader(userId, clientId, body, token);
+        var url = baseUrl + "targetInfo";
+        callRetrieveAjax(url, header, body, retrieveTargetByIdCallBackProcess, target);
+        return target;
+      }
+      
+      function setFormValue(targetName, userinfo) {
+        $('#target-name').val(targetName);        
+        $("input[name='sex'][value='" + userinfo.sex + "']").prop("checked",true);
+        $("#age").val(userinfo.age);
+        $("input[name='roam'][value='" + userinfo.roam + "']").prop("checked",true);
+        $("input[name='resident'][value='" + userinfo.resident + "']").prop("checked",true);
+        
+      }
+    </script>
+    
+  </body>
+</html>

@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <!-- Meta, title, CSS, favicons, etc. -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>中新生态城</title>
+
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css" rel="stylesheet" media="screen">
+    <link href="./assets/css/font-awesome.min.css" rel="stylesheet">
+    <link href="./assets/css/custom.css" rel="stylesheet">
+    
+    <style type="text/css">
+
+    </style>
+  </head>
+
+  <body class="nav-md">
+    <div class="container body">
+      <div class="main_container">
+        <div class="col-md-3 left_col menu_fixed">
+          <div class="left_col scroll-view">
+            <!-- sidebar menu -->
+            <div id="sidebar-menu" class="main_menu_side hidden-print main_menu">
+              <div class="menu_section">
+                <h3></h3>
+                <ul class="nav side-menu">
+                  <li><a><i class="fa fa-group"></i>人口监控分析<span class="fa fa-chevron-down"></span></a>
+                  </li>
+                  <li><a><i class="fa fa-wifi"></i>WiFi热点分析<span class="fa fa-chevron-down"></span></a>
+                  </li>
+                  <li><a><i class="fa fa-comment-o"></i>公共信息发布<span class="fa fa-chevron-down"></span></a>
+                    <ul class="nav child_menu">
+                      <li><a href="task_create_zx.html">短信发送</a></li>
+                      <li><a href="task_zx.html">日志查询</a></li>
+                      <li><a href="target_zx.html">客群管理</a></li>
+                    </ul>
+                  </li>
+                </ul>
+              </div>
+            </div>
+            <!-- /sidebar menu -->
+          </div>
+        </div>
+
+        <!-- top navigation -->
+        <div class="top_nav">
+          <div class="nav_menu">
+            <nav>
+              <div class="nav toggle">
+                <a id="menu_toggle"><i class="fa fa-bars"></i></a>
+              </div>
+
+              <ul class="nav navbar-nav navbar-right">
+                <li class="">
+                  <a href="javascript:;" class="user-profile dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+                    用户名
+                    <span class=" fa fa-angle-down"></span>
+                  </a>
+                  <ul class="dropdown-menu dropdown-usermenu pull-right">
+                    <li><a id="logout"><i class="fa fa-sign-out pull-right"></i>退出登录</a></li>
+                  </ul>
+                </li>
+              </ul>
+            </nav>
+          </div>
+        </div>
+        <!-- /top navigation -->
+
+        <!-- page content -->
+        <div class="right_col" role="main" >
+          <div class="row">
+            <div class="col-md-12 col-sm-12 col-xs-12">
+              <div class="x_panel">
+                <div class="x_title">
+                  <h5>客群管理</h5>
+                  <div class="clearfix"></div>
+                </div>
+                <div class="x_content">
+                  <div class="col-lg-6">
+                    <a class="btn btn-primary" href="target_create_zx.html" role="button">新建</a>
+                  </div>
+                
+                  <div class="col-lg-6">
+                    <div class="input-group" >
+                      <input type="date" id="end-date" placeholder="YYYY-MM-DD" style="float: right; margin-right: 1em;">
+                      <input type="date" id="start-date" placeholder="YYYY-MM-DD" style="float: right; margin-right: 1em;">
+                      <span class="input-group-btn">
+                        <button id="search" class="btn btn-default" type="button" style="float: right">查询</button>
+                      </span>
+                    </div><!-- /input-group -->
+                  </div><!-- /.col-lg-6 -->
+                  <table id="datatable" class="table table-striped table-bordered col-lg-12">
+                    <thead>
+                      <tr>
+                        <th>创建时间</th>
+                        <th>客群名称</th>
+                        <th>创建人员</th>
+                        <th>操作</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      
+                    </tbody>
+                  </table>
+
+                  <!--
+                  <nav aria-label="Page navigation">
+                    <ul class="pagination">
+                      <li>
+                        <a href="#" aria-label="Previous">
+                          <span aria-hidden="true">&laquo;</span>
+                        </a>
+                      </li>
+                      <li><a href="#">1</a></li>
+                      <li><a href="#">2</a></li>
+                      <li><a href="#">3</a></li>
+                      <li><a href="#">4</a></li>
+                      <li><a href="#">5</a></li>
+                      <li>
+                        <a href="#" aria-label="Next">
+                          <span aria-hidden="true">&raquo;</span>
+                        </a>
+                      </li>
+                    </ul>
+                  </nav>-->
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- /page content -->
+        
+        <div class="modal fade" id="confirm-delete" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                确认删除
+              </div>
+              <div class="modal-body">
+                确认删除后该信息将无法找回 
+              </div>
+              <div class="modal-footer">
+                <button id="cancel" type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                <button id="confirm" type="button" class="btn btn-danger" >删除</a>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="modal fade" tabindex="-1" role="dialog" id="error-message">
+          <div class="modal-dialog" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">信息</h4>
+              </div>
+              <div class="modal-body" id="modal-message">
+                <p></p>
+              </div>
+              <div class="modal-footer">
+                <button id="close-modal" type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+              </div>
+            </div><!-- /.modal-content -->
+          </div><!-- /.modal-dialog -->
+        </div><!-- /.modal -->
+        
+        <!--
+        <footer>
+          <div class="pull-right">
+            中新生态城 <a href="https://colorlib.com"></a>
+          </div>
+          <div class="clearfix"></div>
+        </footer>
+        -->
+        
+      </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-1.11.1.min.js"></script>
+    <script src="assets/js/bootstrap.min.js"></script>
+    <script src="./assets/js/date.js"></script>
+    
+    <script src="./assets/js/custom.js"></script>
+    <script src="./assets/js/main.js"></script>
+    <script src="./assets/js/jquery.sha1.js"></script>
+
+    <script>
+      var deleteTargetId = 0;
+      
+      $(document).ready(function () {
+        var now = new Date();
+        var endday = ("0" + now.getDate()).slice(-2);
+        var endmonth = ("0" + (now.getMonth() + 1)).slice(-2);
+        var day2 = now.getFullYear()+"-"+(endmonth)+"-"+(endday);
+        $('#end-date').val(day2);
+        
+        var starttime = now.addDays(-7);
+         
+        var startday = ("0" + starttime.getDate()).slice(-2);
+        var startmonth = ("0" + (starttime.getMonth() + 1)).slice(-2);
+        var day1 = starttime.getFullYear()+"-"+(startmonth)+"-"+(startday) ;
+        
+        $('#start-date').val(day1);
+        
+        //var time1 = now.getHours() + ":" + now.getMinutes();
+        //$('#start-time').val(time1);
+        //$('#end-time').val(time1);
+        
+        $('#search').click(function() {
+          refreshTable();
+        });
+        
+        $(document).on("click", "#datatable button", function () {
+          var name = this.name.toLowerCase();
+          var id = parseInt(this.value);
+          if (name == 'edit') {
+            setCookie('target-id', id, 1);
+            location.href = 'target_update_zx.html';//跳转页面
+          }
+          else if (name == 'detail') {
+            setCookie('target-id', id, 1);
+            location.href = 'target_detail_zx.html';//跳转页面
+          }
+          else if (name == 'delete') {
+            deleteTargetId = id;
+            $('#confirm-delete').modal();
+          }
+        });
+        
+        $('#confirm').click(function() {
+          $('#confirm-delete').modal('hide');
+          deleteTarget(deleteTargetId);
+          deleteTargetId = 0;
+          refreshTable();
+        });
+        
+        $('#cancel').click(function() {
+          deleteTargetId = 0;
+        });
+      });
+      
+      function retrieveTargetCallBackProcess(result) {
+        if (result.errcode >= 0) {
+          var list = result.data.targetlist;
+          buildTable(list);
+        }
+        else {
+          showMessage(result.errmsg);
+        }
+      }
+      
+      function refreshTable() {        
+        var starttime = getFormatJsonStartTime($('#start-date').val());
+        var endtime = getFormatJsonEndTime($('#end-date').val());
+        
+        if (starttime.length >0 && endtime.length > 0) {
+          var query = new Object;
+          query.starttime = starttime;
+          query.endtime = endtime;
+          var body = JSON.stringify(query);
+          var userId = getCookie('userId');
+          var clientId = getCookie('clientId');
+          var token = getCookie('token');
+          var header = new AjaxHeader(userId, clientId, body, token);
+          var url = baseUrl + 'targetList';
+          callAjax(url, header, body, retrieveTargetCallBackProcess);
+        }
+        else {
+          showMessage("请选择查询日期");
+        }
+      }
+      
+      function deleteTargetCallBackProcess(result) {
+        var message = "<p>删除信息已提交</p>"
+        if (result.errcode >= 0) {
+          message += "<p>信息已删除</>"
+        }
+        else {
+          message += "<p>信息删除失败</p>"
+          message += "<p>";
+          message += result.errmsg;
+          message += "</>"
+        }
+        showMessage(message);
+      }
+      
+      function deleteTarget(id) {
+        $('#modal-message').empty();
+        var target = new Object;
+        target.targetID = id.toString();
+        var body = JSON.stringify(target);
+        var userId = getCookie('userId');
+        var clientId = getCookie('clientId');
+        var token = getCookie('token');
+        var header = new AjaxHeader(userId, clientId, body, token);
+        var url = baseUrl + 'targetDelete';
+        callAjax(url, header, body, deleteTargetCallBackProcess);
+      }
+      
+      function buildTable(targets) {
+        $('#datatable tbody').empty();
+        for (var i = 0; i <= targets.length - 1; i++){
+          var content = "<tr>";
+          content += "<td>" + getFormatDateTime(targets[i].createTime) + "</td>";
+          content += "<td>" + targets[i].targetName + "</td>";
+          content += "<td>" + targets[i].oper + "</td>";
+          content += "<td style=\"padding: 0.25em 1em; margin: 0;\">";
+          content += "<button type=\"button\" class=\"btn btn-primary btn-sm active\" name=\"detail\" value=\"" + targets[i].targetID + "\" role=\"button\" aria-pressed=\"true\" style=\"margin: 0;\">查看</a>";
+          content += "<button type=\"button\" class=\"btn btn-primary btn-sm active\" name=\"delete\" value=\"" + targets[i].targetID + "\" role=\"button\" aria-pressed=\"true\" style=\"margin: 0;\">删除</a>";
+          content += "</td>";
+          content += "</tr>";
+          $('#datatable tbody').append(content);
+        }
+      }
+    </script>
+    
+  </body>
+</html>

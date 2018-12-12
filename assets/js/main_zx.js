@@ -196,7 +196,7 @@ function loginCallBackProcess(result) {
     setCookie("userId", result.data.userID);
     setCookie("token", result.data.token);
     setCookie("clientId", result.data.clientID);
-    location.href = 'task.html';
+    location.href = 'task_zx.html';
   }
   else {
     var message = "<p>登录失败</p>";
@@ -228,7 +228,7 @@ function logoutCallBackProcess(result) {
     deleteCookie("userId");
     deleteCookie("token");
     deleteCookie("clientId");
-    location.href = 'login.html';
+    location.href = 'login_zx.html';
   }
   else {
     var message = "<p>Logout失败</p>";
