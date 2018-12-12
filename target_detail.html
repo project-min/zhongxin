@@ -39,7 +39,7 @@
                 <ul class="nav side-menu">
                   <li><a><i class="fa fa-group"></i>人口监控分析<span class="fa fa-chevron-down"></span></a>
                   </li>
-                  <li><a><i class="fa fa-wifi"></i>WiFi热点分析<span class="fa fa-chevron-down"></span></a>
+                  <li><a><i class="fa fa-wifi"></i>Wi-Fi热点分析<span class="fa fa-chevron-down"></span></a>
                   </li>
                   <li><a><i class="fa fa-comment-o"></i>公共信息发布<span class="fa fa-chevron-down"></span></a>
                     <ul class="nav child_menu">
@@ -72,7 +72,7 @@
                   <ul class="dropdown-menu dropdown-usermenu pull-right">
                     <li><a id="logout"><i class="fa fa-sign-out pull-right"></i>退出登录</a></li>
                   </ul>
-                </li> 
+                </li>
               </ul>
             </nav>
           </div>
@@ -82,137 +82,134 @@
         <!-- page content -->
         <div class="right_col" role="main" >
           <div class="row">
-            <div class="col-md-3 col-sm-3 col-xs-3">
+            <div class="col-md-3" id="template-form">
               <div class="x_panel">
                 <div class="x_title">
-                  <h5>客群设置</h5>
+                  <h5>客群选择</h5>
                   <div class="clearfix"></div>
                 </div>
                 <div class="x_content">
-                  <!-- start form for validation -->
-                  <form>
-                    <div style="padding: 0 0 1em 0; ">
-                      <label for="target-name">客群名称：</label>
-                      <div class="input-group">
-                        <div class="btn-group">
-                          <input type="text" class="form-control" id="target-name" readonly>
-                        </div>
+
+                  <div style="padding: 0 0 1em 0; ">
+                    <label for="target-name">客群名称：</label>
+                    <div class="input-group">
+                      <input id="target-name" type="text" class="form-control" placeholder="" readonly>
+                    </div><!-- /input-group -->
+                  </div>
+                  <div style="padding: 0 0 1em 0; ">
+                    <label for="sex">性别：</label>
+                    <!-- Default inline 1-->
+                    <div class="row">
+                      <div class="col-lg-3">
+                        <input type="radio" name="sex" value="0" disabled="true">
+                        <label>全部</label>
+                      </div>
+                      <div class="col-lg-3">
+                        <input type="radio" name="sex" value="1" disabled="true">
+                        <label>男</label>
+                      </div>
+                      <div class="col-lg-3">
+                        <input type="radio" name="sex" value="2" disabled="true">
+                        <label>女</label>
                       </div>
                     </div>
-                    <div style="padding: 0 0 1em 0; ">
-                      <label for="sex">性别：</label>
-                      <!-- Default inline 1-->
-                      <div class="row">
-                        <div class="col-lg-3">
-                          <input type="radio" name="sex" value="0" disabled>
-                          <label>全部</label>
-                        </div>
-                        <div class="col-lg-3">
-                          <input type="radio" name="sex" value="1" disabled>
-                          <label>男</label>
-                        </div>
-                        <div class="col-lg-3">
-                          <input type="radio" name="sex" value="2" disabled>
-                          <label>女</label>
-                        </div>
+                  </div>
+                  <div style="padding: 0 0 1em 0; ">
+                    <label for="age">年龄段：</label>
+                      <select id="age" class="custom-select" disabled="true">
+                        <option value="0">不限</option>
+                        <option value="1">0-20</option>
+                        <option value="2">21-40</option>
+                        <option value="4">40-60</option>
+                        <option value="8">60以上</option>
+                      </select>
+                  </div>
+                  <div style="padding: 0 0 1em 0; ">
+                    <label for="roam">外省：</label>
+                    <div class="row">
+                      <div class="col-lg-3">
+                        <input type="radio" name="roam" value="0" disabled="true">
+                        <label>否</label>
+                      </div>
+                      <div class="col-lg-3">
+                        <input type="radio" name="roam" value="1" disabled="true">
+                        <label>是</label>
                       </div>
                     </div>
-                    <div style="padding: 0 0 1em 0; ">
-                      <label for="age">年龄段：</label>
-                        <select id="age" class="custom-select" disabled>
-                          <option value="0">不限</option>
-                          <option value="1">0-20</option>
-                          <option value="2">21-40</option>
-                          <option value="4">40-60</option>
-                          <option value="8">60以上</option>
-                        </select>
-                    </div>
-                    <div style="padding: 0 0 1em 0; ">
-                      <label for="roam">外省：</label>
-                      <div class="row">
-                        <div class="col-lg-3">
-                          <input type="radio" name="roam" value="0" disabled>
-                          <label>否</label>
-                        </div>
-                        <div class="col-lg-3">
-                          <input type="radio" name="roam" value="1" disabled>
-                          <label>是</label>
-                        </div>
+                  </div>
+                  <div style="padding: 0 0 1em 0; ">
+                    <label for="resident">居住情况：</label>
+                    <div class="row">
+                      <div class="col-lg-12">
+                        <input type="radio" name="resident" value="0" disabled="true">
+                        <label>全部</label>
+                      </div>
+                      <div class="col-lg-12">
+                        <input type="radio" name="resident" value="1" disabled="true">
+                        <label>常驻人口</label>
+                      </div>
+                      <div class="col-lg-12">
+                        <input type="radio" name="resident" value="2" disabled="true">
+                        <label>非常驻人口</label>
                       </div>
                     </div>
-                    <div style="padding: 0 0 1em 0; ">
-                      <label for="resident">居住情况：</label>
-                      <div class="row">
-                        <div class="col-lg-12">
-                          <input type="radio" name="resident" value="0" disabled>
-                          <label>全部</label>
-                        </div>
-                        <div class="col-lg-12">
-                          <input type="radio" name="resident" value="1" disabled>
-                          <label>常驻人口</label>
-                        </div>
-                        <div class="col-lg-12">
-                          <input type="radio" name="resident" value="2" disabled>
-                          <label>非常驻人口</label>
-                        </div>
-                      </div>
-                    </div>
-                  </form>
-                  <!-- end form for validations -->
-                  
+                  </div>
                 </div>
-                
-                
-                
               </div>
             </div>
             <div class="col-md-9"  id="map-container">
               <div id="map">
-                <button type="button" class="btn btn-default" id="map-confirm" style="position: absolute; z-index: 100; right: 25px; bottom: 15px; visibility: hidden;">确认</button>
+                <button type="button" class="btn btn-default" id="map-confirm" style="position: absolute; z-index: 100; right: 25px; bottom: 15px; ">加载</button>
               </div>
               
             </div>
           </div>
         </div>
-        <!-- /page content -->
         
+        <!-- /page content -->
         <div class="modal fade" tabindex="-1" role="dialog" id="error-message">
           <div class="modal-dialog" role="document">
             <div class="modal-content">
-            <div class="modal-header">
-              <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-              <h4 class="modal-title">信息</h4>
-            </div>
-            <div class="modal-body" id="modal-message">
-              <p></p>
-            </div>
-            <div class="modal-footer">
-              <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-            </div>
-          </div><!-- /.modal-content -->
-        </div><!-- /.modal-dialog -->
-      </div><!-- /.modal -->
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">信息</h4>
+              </div>
+              <div class="modal-body" id="modal-message">
+                <p></p>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+              </div>
+            </div><!-- /.modal-content -->
+          </div><!-- /.modal-dialog -->
+        </div><!-- /.modal -->
         
-        <!-- footer content -->
+        <!--
         <footer>
           <div class="pull-right">
             中新生态城 <a href="https://colorlib.com"></a>
           </div>
           <div class="clearfix"></div>
         </footer>
-        <!-- /footer content -->
+        -->
         
       </div>
     </div>
 
     <script src="https://code.jquery.com/jquery-1.11.1.min.js"></script>
     <script src="assets/js/bootstrap.min.js"></script>
+    
+    <script src="./assets/js/date.js"></script>
+    
+    <script src="./assets/js/jquery.smartWizard.js"></script>
 
     <script src="./assets/js/custom.js"></script>
-    <script src="./assets/js/jquery.sha1.js"></script>
     <script src="./assets/js/main.js"></script>
+    <script src="./assets/js/jquery.sha1.js"></script>
     
     <script>
+      var task = new Object;
+      var target = new Object;
       var groupId;
       var taskName;
       var beginDate;
@@ -222,18 +219,12 @@
       var messageTitle;
       var messageConent;
       
-      var task;
-      
       var map;
       var toolbar;
 
       var editToolbar;
 
-      var polygons = [];
-      
-      var jsonData;
-      
-      var targetId;
+      var arrayPolygon = [];
 
       require(
         ["esri/map",
@@ -302,26 +293,22 @@
                                 xmax:ext.xmax,
                                 ymax:ext.ymax})
           });
-          
+
           var tiledLayer = new ArcGISTiledMapServiceLayer(
             "https://server.arcgisonline.com/arcgis/rest/services/World_Street_Map/MapServer", 
             { spatialReference: sr }
           );
         
           map.addLayer(tiledLayer);
-
+          
           map.on("load", function() {
             //createToolbarAndContextMenu();
-          });          
+          });
 
           on(dom.byId("map-confirm"), "click", function(evt){
-            transferPolygon();
+            map.graphics.clear();
+            drawMap(target.geoInfo);
           });
-            
-          targetId = getTargetId();
-          var target = getTargetById(targetId);
-          setFormValue(target.targetName, target.userinfo);
-          drawMap(target.geoInfo);
         
           function transferPolygon() {
             var convertPolygons = [];
@@ -390,8 +377,6 @@
               //];
               drawPolygon(points);
             }
-            
-            
           }
             
           function drawPolygon(points) {
@@ -518,139 +503,13 @@
       );
 
       $(document).ready(function () {
-        //var targetId = getTargetId();
-        
-        //var target = getTargetById(targetId);
-        $('#commit').click(function(){
-          targetCreate();
-        })
+        var targetId = getTargetId();
+        if (isInteger(targetId)) {
+          getTargetById(targetId);
+          setFormValue();
+          $('#map-confirm').trigger("click");
+        }        
       });
-      
-      function point(lng, lat) {
-        this.lng = lng;
-        this.lat = lat;
-      }
-      
-      function graphic(polygon) {
-        this.polygon = polygon;
-      }
-      
-      function UserInfo(sex, age, roam, resident) {
-        this.sex = sex;
-        this.age = age;
-        this.roam = roam;
-        this.resident = resident;
-      }
-      
-      function Target(Id, targetName, geoInfo, userinfo){
-        this.targetID = Id;
-        this.targetName = targetName;
-        this.geoInfo = geoInfo;
-        this.userinfo = userinfo;
-      }
-      
-      function buildJsonData() {
-        $('#modal-message').empty();
-        var geos =[];
-        var errorMessage = '';
-        var strName = $('#target-name').val();
-        var strSex = $("input[name='sex']:checked").val();
-        var strAge = $("#age").val();
-        var strRoam = $("input[name='roam']:checked").val();
-        var strResident = $("input[name='resident']:checked").val();
-        
-        if (strName.length <= 0) {
-          errorMessage += "<p>客群名称不能为空；</p>";
-        }
-        
-        var sex = parseInt(strSex);
-        if (sex != 0 && sex != 1 && sex != 2) {
-          errorMessage += "<p>性别选择发生错误；</p>";
-        }
-        
-        var age = parseInt(strAge);
-        if (isInteger(age)) {
-          {
-            if (age < 0 || age > 8) {
-              errorMessage += "<p>年龄选择发生错误；</p>";
-            }
-          }
-        }
-        else {
-          errorMessage += "<p>年龄选择发生错误；</p>";
-        }
-        
-        var roam = parseInt(strRoam);
-        if (roam != 0 && roam != 1) {
-          errorMessage += "<p>外省选择发生错误；</p>";
-        }
-        
-        var resident = parseInt(strResident);
-        if (resident != 0 && resident != 1 && resident != 2) {
-          errorMessage += "<p>常驻人口选择发生错误；</p>";
-        }
-        
-        if (polygons.length <= 0) {
-          errorMessage += "<p>未选择地图区域；若已选择请点击地图上的确认按钮确认修改；</p>";
-        }
-        
-        if (errorMessage.length > 0) {
-          $('#modal-message').append(errorMessage);
-          $('#error-message').modal();
-        }
-        else {
-        
-          var name = strName;
-          var user = new UserInfo(sex, age, roam, resident);
-          var serviceId = 0;
-          var graphics = new Object;
-          graphics.polygons = polygons;
-          geos.push(graphics);
-          
-          t = new Target(targetId, name, geos, user);
-          var body = JSON.stringify(t);
-          var userId = getCookie('userId');
-          var clientId = getCookie('clientId');
-          var token = getCookie('token');
-          var header = new AjaxHeader(userId, clientId, body, token);
-          $.ajax({
-            type: 'post',
-            url:'http://127.0.0.1:8000/ajax/target/update/',
-            dataType: 'json',
-            data: body,
-            beforeSend: function(xhr) {
-              setAjaxHeader(xhr, header);
-            },
-            async: false,
-            success: function(result) {
-              var message = "<p>客群修改信息已提交</p>"
-              if (result.errcode >= 0) {
-                message += "<p>信息已保存</>"
-              }
-              else {
-                message += "<p>信息保存失败</p>"
-                message += "<p>";
-                message += data.message;
-                message += "</>"
-              }
-              $('#modal-message').append(message);
-              $('#error-message').modal();
-            },
-            error: function (XMLHttpRequest, textStatus, errorThrown) {
-              var message = "<p>信息提交过程发生异常，请与管理员联系</p>"
-              message += "<p>状态码：" + XMLHttpRequest.status + "</p>"
-              message += "<p>状态：" + XMLHttpRequest.readyState + "</p>"
-              message += "<p>异常信息：" + textStatus + "</p>"
-              $('#modal-message').append(message);
-              $('#error-message').modal();
-            }
-          });
-        }
-      }
-      
-      function targetCreate(){
-        buildJsonData();
-      }
       
       function getTargetId()
       {
@@ -662,13 +521,22 @@
         return id;
       }
       
+      function setFormValue() {
+        $("#target-name").val(target.targetName);
+        $("input[name='sex'][value='" + target.userinfo.sex + "']").prop("checked",true);
+        $("#age").val(target.userinfo.age);
+        $("input[name='roam'][value='" + target.userinfo.roam + "']").prop("checked",true);
+        $("input[name='resident'][value='" + target.userinfo.resident + "']").prop("checked",true);
+      }
+        
       function retrieveTargetByIdCallBackProcess(result, obj) {
         if (result.errcode >= 0) {
           var data = result.data;
-          obj.targetName = data.targetName;
-          obj.createTime = data.createTime;
-          obj.geoInfo = data.geoInfo;
-          obj.userinfo = data.userinfo;
+          target.targetID = data.targetID;
+          target.targetName = data.targetName;
+          target.createTime = data.createTime;
+          target.geoInfo = data.geoInfo;
+          target.userinfo = data.userinfo;
         }
         else {
           showMessage(result.errmsg);
@@ -676,7 +544,6 @@
       }
       
       function getTargetById(targetId) {
-        var target = new Object;
         var query = new Object;
         
         query.targetID = targetId.toString();
@@ -686,17 +553,7 @@
         var token = getCookie('token');
         var header = new AjaxHeader(userId, clientId, body, token);
         var url = baseUrl + "targetInfo";
-        callRetrieveAjax(url, header, body, retrieveTargetByIdCallBackProcess, target);
-        return target;
-      }
-      
-      function setFormValue(targetName, userinfo) {
-        $('#target-name').val(targetName);        
-        $("input[name='sex'][value='" + userinfo.sex + "']").prop("checked",true);
-        $("#age").val(userinfo.age);
-        $("input[name='roam'][value='" + userinfo.roam + "']").prop("checked",true);
-        $("input[name='resident'][value='" + userinfo.resident + "']").prop("checked",true);
-        
+        callAjax(url, header, body, retrieveTargetByIdCallBackProcess);
       }
     </script>
     
