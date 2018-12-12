@@ -9,7 +9,7 @@
 
     <title>中新生态城</title>
 
-    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css" rel="stylesheet" media="screen">
+    <link href="./assets/css/bootstrap.min.css" rel="stylesheet" media="screen">
     <link href="./assets/css/font-awesome.min.css" rel="stylesheet">
 
     <link href="./assets/css/custom.css" rel="stylesheet">
@@ -205,22 +205,13 @@
       </div>
     </div>
 
-    <script src="https://code.jquery.com/jquery-1.11.1.min.js"></script>
-    <script src="assets/js/bootstrap.min.js"></script>
-    <script src="./assets/js/jquery.smartWizard.js"></script>
+    <script src="./assets/js/jquery-1.11.1.min.js"></script>
+    <script src="./assets/js/bootstrap.min.js"></script>    <script src="./assets/js/jquery.smartWizard.js"></script>
     <script src="./assets/js/custom.js"></script>
     <script src="./assets/js/main.js"></script>
     <script src="./assets/js/jquery.sha1.js"></script>
     
     <script>
-      var groupId;
-      var taskName;
-      var beginDate;
-      var endDate;
-      var maxAmount;
-      var noDistrub;
-      var messageTitle;
-      var messageConent;
       var polygons = [];
       
       var map;
@@ -471,7 +462,8 @@
 
       $(document).ready(function () {
         $('#commit').click(function(){
-          createTarget();
+          var result = createTarget();
+          showMessage(result.message);
         })
       });
       
@@ -540,18 +532,18 @@
         }
       }
       
-      function createTargetCallBackProcess(result) {
-        var message = "<p>新客群信息已提交</p>"
-        if (result.errcode >= 0) {
-          message += "<p>信息已保存</>"
+      function createTargetCallBackProcess(ajaxResult) {
+        var message = "<p>新客群信息已提交</p>";
+        if (ajaxResult.errcode >= 0) {
+          message += "<p>信息已保存</>";
         }
         else {
-          message += "<p>信息保存失败</p>"
+          message += "<p>信息保存失败</p>";
           message += "<p>";
           message += result.errmsg;
-          message += "</>"
+          message += "</>";
         }
-        showMessage(message);
+        return new Result(ajaxResult.errcode, message);
       }
       
       function createTarget() {
@@ -563,7 +555,7 @@
           var token = getCookie('token');
           var header = new AjaxHeader(userId, clientId, body, token);
           var url = baseUrl + 'targetCreate';
-          callAjax(url, header, body, createTargetCallBackProcess);
+          return callAjax(url, header, body, createTargetCallBackProcess);
         }
       }
     </script>

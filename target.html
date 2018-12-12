@@ -9,7 +9,7 @@
 
     <title>中新生态城</title>
 
-    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css" rel="stylesheet" media="screen">
+    <link href="./assets/css/bootstrap.min.css" rel="stylesheet" media="screen">
     <link href="./assets/css/font-awesome.min.css" rel="stylesheet">
     <link href="./assets/css/custom.css" rel="stylesheet">
     
@@ -180,8 +180,8 @@
       </div>
     </div>
 
-    <script src="https://code.jquery.com/jquery-1.11.1.min.js"></script>
-    <script src="assets/js/bootstrap.min.js"></script>
+    <script src="./assets/js/jquery-1.11.1.min.js"></script>
+    <script src="./assets/js/bootstrap.min.js"></script>
     <script src="./assets/js/date.js"></script>
     
     <script src="./assets/js/custom.js"></script>
@@ -192,23 +192,7 @@
       var deleteTargetId = 0;
       
       $(document).ready(function () {
-        var now = new Date();
-        var endday = ("0" + now.getDate()).slice(-2);
-        var endmonth = ("0" + (now.getMonth() + 1)).slice(-2);
-        var day2 = now.getFullYear()+"-"+(endmonth)+"-"+(endday);
-        $('#end-date').val(day2);
-        
-        var starttime = now.addDays(-7);
-         
-        var startday = ("0" + starttime.getDate()).slice(-2);
-        var startmonth = ("0" + (starttime.getMonth() + 1)).slice(-2);
-        var day1 = starttime.getFullYear()+"-"+(startmonth)+"-"+(startday) ;
-        
-        $('#start-date').val(day1);
-        
-        //var time1 = now.getHours() + ":" + now.getMinutes();
-        //$('#start-time').val(time1);
-        //$('#end-time').val(time1);
+        initialForm();
         
         $('#search').click(function() {
           refreshTable();
@@ -243,40 +227,38 @@
         });
       });
       
-      function retrieveTargetCallBackProcess(result) {
-        if (result.errcode >= 0) {
-          var list = result.data.targetlist;
-          buildTable(list);
-        }
-        else {
-          showMessage(result.errmsg);
-        }
+      function initialForm() {
+        var now = new Date();
+        var endday = ("0" + now.getDate()).slice(-2);
+        var endmonth = ("0" + (now.getMonth() + 1)).slice(-2);
+        var day2 = now.getFullYear()+"-"+(endmonth)+"-"+(endday);
+        $('#end-date').val(day2);
+        
+        var starttime = now.addDays(-7);
+         
+        var startday = ("0" + starttime.getDate()).slice(-2);
+        var startmonth = ("0" + (starttime.getMonth() + 1)).slice(-2);
+        var day1 = starttime.getFullYear()+"-"+(startmonth)+"-"+(startday) ;
+        
+        $('#start-date').val(day1);
       }
       
-      function refreshTable() {        
+      function refreshTable() {
         var starttime = getFormatJsonStartTime($('#start-date').val());
         var endtime = getFormatJsonEndTime($('#end-date').val());
-        
-        if (starttime.length >0 && endtime.length > 0) {
-          var query = new Object;
-          query.starttime = starttime;
-          query.endtime = endtime;
-          var body = JSON.stringify(query);
-          var userId = getCookie('userId');
-          var clientId = getCookie('clientId');
-          var token = getCookie('token');
-          var header = new AjaxHeader(userId, clientId, body, token);
-          var url = baseUrl + 'targetList';
-          callAjax(url, header, body, retrieveTargetCallBackProcess);
+
+        var result = retrieveTargets(starttime, endtime);
+        if (result.code >= 0) {
+           buildTable(result.data);
         }
         else {
-          showMessage("请选择查询日期");
+          showMessage(result.message);
         }
       }
       
-      function deleteTargetCallBackProcess(result) {
+      function deleteTargetCallBackProcess(ajaxResult) {
         var message = "<p>删除信息已提交</p>"
-        if (result.errcode >= 0) {
+        if (ajaxResult.errcode >= 0) {
           message += "<p>信息已删除</>"
         }
         else {
@@ -285,11 +267,10 @@
           message += result.errmsg;
           message += "</>"
         }
-        showMessage(message);
+        return new Result(ajaxResult.errcode, message);
       }
       
       function deleteTarget(id) {
-        $('#modal-message').empty();
         var target = new Object;
         target.targetID = id.toString();
         var body = JSON.stringify(target);
@@ -298,7 +279,39 @@
         var token = getCookie('token');
         var header = new AjaxHeader(userId, clientId, body, token);
         var url = baseUrl + 'targetDelete';
-        callAjax(url, header, body, deleteTargetCallBackProcess);
+        return callAjax(url, header, body, deleteTargetCallBackProcess);
+      }
+      
+      function retrieveTargetCallBackProcess(ajaxResult) {
+        if (ajaxResult.errcode >= 0) {
+          return new RetrieveResult(ajaxResult.errcode, '', ajaxResult.data.targetlist);
+        }
+        else {
+          return new RetrieveResult(ajaxResult.errcode, ajaxResult.errmsg, null);
+        }
+      }
+      
+      function retrieveTargets(starttime, endtime) {
+        if (starttime.length >0 && endtime.length > 0) {
+          var query = new Object;
+          query.starttime = starttime;
+          query.endtime = endtime;
+          
+          var result = new Object;
+          var body = JSON.stringify(query);
+          var userId = getCookie('userId');
+          var clientId = getCookie('clientId');
+          var token = getCookie('token');
+          var header = new AjaxHeader(userId, clientId, body, token);
+          var url = baseUrl + 'targetList';
+          return callRetrieveAjax(url, header, body, retrieveTargetCallBackProcess);
+        }
+        else {
+          var result = new Object;
+          result.code = -1;
+          result.message = "请选择查询日期";
+          result.targets = [];
+        }
       }
       
       function buildTable(targets) {

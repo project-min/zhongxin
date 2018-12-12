@@ -11,6 +11,23 @@ Array.prototype.in_array = function(value) {
   return false;
 }
 
+function Result(code, message) {
+  this.code = code;
+  this.message = message;
+}
+
+function RetrieveResult(code, message, data) {
+  this.code = code;
+  this.message = message;
+  this.data = data;
+}
+
+function Security(userId, token, clientId) {
+  this.userId = userId;
+  this.token = token;
+  this.clientId = clientId;
+}
+
 /**
  * 设置cookie
  * @param {string} name  键名
@@ -143,6 +160,7 @@ function setAjaxHeader(xhr, header) {
 }
 
 function callAjax(url, header, body, callBackProcess) {
+  var result;
   $.ajax({
     type: 'post',
     url: url,
@@ -152,20 +170,25 @@ function callAjax(url, header, body, callBackProcess) {
       setAjaxHeader(xhr, header);
     },
     async: false,
-    success: function(result) {
-      callBackProcess(result);
+    success: function(ajaxResult) {
+      result = callBackProcess(ajaxResult);
     },
     error: function (XMLHttpRequest, textStatus, errorThrown) {
-      var message = "<p>信息提交过程发生异常，请与管理员联系</p>"
-      message += "<p>状态码：" + XMLHttpRequest.status + "</p>"
-      message += "<p>状态：" + XMLHttpRequest.readyState + "</p>"
-      message += "<p>异常信息：" + textStatus + "</p>"
-      showMessage(message);
+      var message = "<p>信息提交过程发生异常，请与管理员联系</p>";
+      message += "<p>状态码：" + XMLHttpRequest.status + "</p>";
+      message += "<p>状态：" + XMLHttpRequest.readyState + "</p>";
+      message += "<p>异常信息：" + textStatus + "</p>";
+      result = new Object;
+      result.code = -1;
+      result.message = message;
+      result.data = null;
     }
   });
+  return result;
 }
 
-function callRetrieveAjax(url, header, body, callBackProcess, obj) {
+function callRetrieveAjax(url, header, body, callBackProcess) {
+  var result;
   $.ajax({
     type: 'post',
     url: url,
@@ -175,39 +198,40 @@ function callRetrieveAjax(url, header, body, callBackProcess, obj) {
       setAjaxHeader(xhr, header);
     },
     async: false,
-    success: function(result) {
-      callBackProcess(result, obj);
+    success: function(ajaxResult) {
+      result = callBackProcess(ajaxResult);
     },
     error: function (XMLHttpRequest, textStatus, errorThrown) {
-      var message = "<p>信息提交过程发生异常，请与管理员联系</p>"
-      message += "<p>状态码：" + XMLHttpRequest.status + "</p>"
-      message += "<p>状态：" + XMLHttpRequest.readyState + "</p>"
-      message += "<p>异常信息：" + textStatus + "</p>"
-      showMessage(message);
+      var message = "<p>信息提交过程发生异常，请与管理员联系</p>";
+      message += "<p>状态码：" + XMLHttpRequest.status + "</p>";
+      message += "<p>状态：" + XMLHttpRequest.readyState + "</p>";
+      message += "<p>异常信息：" + textStatus + "</p>";
+      result = new Object;
+      result.code = -1;
+      result.message = message;
+      result.data = null;
     }
   });
+  return result;
 }
 
-function loginCallBackProcess(result) {
-  var errorCode = result.errcode;
-  var errorMessage = result.errmsg;
-
-  if (errorCode >= 0) {
-    setCookie("userId", result.data.userID);
-    setCookie("token", result.data.token);
-    setCookie("clientId", result.data.clientID);
-    location.href = 'task.html';
+function loginCallBackProcess(ajaxResult) {
+  if (ajaxResult.errcode >= 0) {
+    var data = {
+      userId: ajaxResult.data.userID, 
+      token: ajaxResult.data.token, 
+      clientId: ajaxResult.data.clientID
+    };
+    return new RetrieveResult(ajaxResult.errcode, '', data);
   }
   else {
     var message = "<p>登录失败</p>";
-    message += "<p>" + result.errmsg + "</p>";
-    showMessage(message);
+    message += "<p>" + ajaxResult.errmsg + "</p>";
+    return new RetrieveResult(ajaxResult.errcode, message, null);
   }
 }
 
 function login(userName, password) {
-  $('#modal-message').empty();
-
   var query = new Object;
   query.username = userName;
 
@@ -217,23 +241,18 @@ function login(userName, password) {
 
   var url = baseUrl + 'login';
   
-  callAjax(url, header, body, loginCallBackProcess);
+  var result = callRetrieveAjax(url, header, body, loginCallBackProcess);
+  return result;
 }
 
 function logoutCallBackProcess(result) {
-  var errorCode = result.errcode;
-  var errorMessage = result.errmsg;
-
-  if (errorCode >= 0) {
-    deleteCookie("userId");
-    deleteCookie("token");
-    deleteCookie("clientId");
-    location.href = 'login.html';
+  if (result.errcode >= 0) {
+    return new Result(result.errcode, '');
   }
   else {
     var message = "<p>Logout失败</p>";
     message += "<p>" + result.errmsg + "</p>";
-    showMessage(message);
+    return new Result(result.errcode, result.errmsg);
   }
 }
 
@@ -246,7 +265,16 @@ function logout() {
   var token = getCookie('token');
   var header = new AjaxHeader(userId, clientId, '', token);
 
-  callAjax(url, header, body, logoutCallBackProcess);
+  var result = callAjax(url, header, body, logoutCallBackProcess);
+  if (result.code == 0) {
+    deleteCookie("userId");
+    deleteCookie("token");
+    deleteCookie("clientId");
+    location.href = 'login.html';
+  }
+  else {
+    showMessage(result.message);
+  }
 }
 
 $(document).ready(function () {

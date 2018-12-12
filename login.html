@@ -9,9 +9,9 @@
 
     <title>中新生态城</title>
 
-    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css" rel="stylesheet" media="screen">
-    <link href="assets/css/font-awesome.min.css" rel="stylesheet">
-    <link href="assets/css/custom.min.css" rel="stylesheet">
+    <link href="./assets/css/bootstrap.min.css" rel="stylesheet" media="screen">
+    <link href="./assets/css/font-awesome.min.css" rel="stylesheet">
+    <link href="./assets/css/custom.min.css" rel="stylesheet">
   </head>
 
   <body class="login">
@@ -59,12 +59,12 @@
       </div>
     </div>
     
-    <script src="https://code.jquery.com/jquery-1.11.1.min.js"></script>
-    <script src="assets/js/bootstrap.min.js"></script>
+    <script src="./assets/js/jquery-1.11.1.min.js"></script>
+    <script src="./assets/js/bootstrap.min.js"></script>
     
-    <script src="assets/js/custom.js"></script>
-    <script src="assets/js/main.js"></script>
-    <script src="assets/js/jquery.sha1.js"></script>
+    <script src="./assets/js/custom.js"></script>
+    <script src="./assets/js/main.js"></script>
+    <script src="./assets/js/jquery.sha1.js"></script>
     
     
     <script>
@@ -72,7 +72,17 @@
         $('#confirm').click(function() {
           var userName = $('#user-name').val();
           var password = $('#password').val();
-          login(userName, password);
+          var result = login(userName, password);
+          if (result.code >= 0) {
+            setCookie("userId", result.data.userId);
+            setCookie("token", result.data.token);
+            setCookie("clientId", result.data.clientId);
+            location.href = 'task.html';
+          }
+          else {
+            showMessage(result.message);
+          }
+          
         });
       });
     </script>

@@ -9,7 +9,7 @@
 
     <title>中新生态城</title>
 
-    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css" rel="stylesheet" media="screen">
+    <link href="./assets/css/bootstrap.min.css" rel="stylesheet" media="screen">
     <link href="./assets/css/font-awesome.min.css" rel="stylesheet">
     <link href="./assets/css/custom.css" rel="stylesheet">
     
@@ -389,8 +389,8 @@
       </div>
     </div>
 
-    <script src="https://code.jquery.com/jquery-1.11.1.min.js"></script>
-    <script src="assets/js/bootstrap.min.js"></script>
+    <script src="./assets/js/jquery-1.11.1.min.js"></script>
+    <script src="./assets/js/bootstrap.min.js"></script>
     
     <script src="./assets/js/date.js"></script>
     
@@ -402,15 +402,8 @@
     
     <script>
       var task = new Object;
-      var target = new Object;
-      var groupId;
-      var taskName;
-      var beginDate;
-      var endDate;
-      var maxAmount;
-      var noDistrub;
-      var messageTitle;
-      var messageConent;
+      
+      var geoInfo;
       
       var map;
       var toolbar;
@@ -419,10 +412,10 @@
 
       var arrayPolygon = [];
 
+      
       require(
         ["esri/map",
          "esri/toolbars/draw",
-         "esri/toolbars/edit",
          "esri/graphic",
          "esri/geometry/Polygon",
          "esri/layers/ArcGISTiledMapServiceLayer",
@@ -446,7 +439,6 @@
         function(
           Map,
           Draw,
-          Edit,
           Graphic,
           Polygon,
           ArcGISTiledMapServiceLayer,
@@ -466,20 +458,20 @@
           parser,
           on,
           dom) {
-            
+
           parser.parse();
-            
+
           var sr = new SpatialReference(4326);
           var ext = {"xmin":117.67255102256046,
                      "ymin":39.06648939147723,
                      "xmax":117.91507758557971,
                      "ymax":39.2233553582866};
-        
+
           var geometryService = new GeometryService("https://utility.arcgisonline.com/ArcGIS/rest/services/Geometry/GeometryServer");
 
           var map = new Map("map", {
-		    logo:false,//右下的esri logo
-		    showAttribution:false,//右下的gisNeu (logo左侧)
+            logo:false,//右下的esri logo
+            showAttribution:false,//右下的gisNeu (logo左侧)
             autoResize: true,
             extent: new Extent({xmin:ext.xmin,
                                 ymin:ext.ymin,
@@ -491,218 +483,52 @@
             "https://server.arcgisonline.com/arcgis/rest/services/World_Street_Map/MapServer", 
             { spatialReference: sr }
           );
-        
+
           map.addLayer(tiledLayer);
 
           map.on("load", function() {
-            //createToolbarAndContextMenu();
-          });          
-
-          on(dom.byId("map-confirm"), "click", function(evt){
             map.graphics.clear();
-            drawMap(target.geoInfo);
+            if (geoInfo != null) {
+              drawMap(geoInfo);
+            }
           });
             
-          //targetId = getUrlLastNumber();
-          //var target = getTargetById(targetId);
-          //setFormValue(target.targetName, target.serviceId, target.userInfo);
-          //drawMap(target.geoInfo);
-        
-          function transferPolygon() {
-            var convertPolygons = [];
-            polygons = [];
-            
-            var length = map.graphics.graphics.length;
-
-            for (var i = 0; i < length; i++) {
-              var py = new Polygon(new SpatialReference(map.graphics.graphics[i].geometry.spatialReference.wkid));
-              py.rings = map.graphics.graphics[i].geometry.rings;
-              py.type = map.graphics.graphics[i].geometry.type;
-              if (py.type.toLowerCase() == "polygon") {
-                convertPolygons.push(py);
-              }
+          on(dom.byId("map-confirm"), "click", function(evt){
+            map.graphics.clear();
+            if (geoInfo != null) {
+              drawMap(geoInfo);
             }
-            if (convertPolygons.length > 0) {
-              var project = geometryService.project(convertPolygons, sr, function(result) {
-                for(var i = 0; i < result.length; i++) {
-                  var points = []
-                  for (var j = 0; j < result[i].rings[0].length; j++) {
-                    var pt = new point(result[i].rings[0][j][0], result[i].rings[0][j][1]);
-                    points.push(pt);
-                  }
-                  var pg = new graphic(points);
-                  polygons.push(pg);
-                }
-                //console.log(polygons);
-                alert("选择区域已确认");
-              });
-            }
-            else {
-              alert("选择区域为空");
-            }
-            //console.log(polygons);
-          }
-
-          function addToMap(evt) {
-            var symbol;
-            toolbar.deactivate();
-            map.showZoomSlider();
-            //symbol = new SimpleFillSymbol();
-            symbol = new SimpleFillSymbol(SimpleFillSymbol.STYLE_SOLID, 
-              new SimpleLineSymbol(SimpleLineSymbol.STYLE_SOLID, new Color([98,194,204]), 2), new Color([98,194,204,0.5])
-            );
-            var graphic = new Graphic(evt.geometry, symbol);
-
-            map.graphics.add(graphic);
-          }
+          });
 
           function drawMap(geoInfo) {
-            console.log("draw poly");
             var latOffset, lonOffset, center, lat, lon, points;
-            
+
             for (var i = 0; i < geoInfo[0].polygons.length; i ++) {
               var points = []
               var polygon = geoInfo[0].polygons[i].polygon;
               for (var j = 0; j < polygon.length; j++) {
                 points.push([polygon[j].lng, polygon[j].lat]);
               }
-              // Create a Green Polygon
-              //var points1 = [
-              //  [117.18244762388206,39.13429536101209],
-              //  [117.18193264039091,39.133363288260526],
-              //  [117.18094558682807,39.134062343980844],
-              //  [117.18244762388206,39.13429536101209]
-              //];
               drawPolygon(points);
             }
           }
-            
+
           function drawPolygon(points) {
             var polygon = new esri.geometry.Polygon();
             polygon.addRing(points);
             polygon.spatialReference = sr;
 
-            console.log("created poly geom");
-
-            // Add the polygon to map
             var symbol = new esri.symbol.SimpleFillSymbol().setStyle(esri.symbol.SimpleFillSymbol.STYLE_SOLID);
             polygonGraphic = new esri.Graphic(polygon, symbol, { keeper: true });
             map.graphics.add(polygonGraphic);
-            //var polyLayer = new esri.layers.GraphicsLayer({ id: "poly" });
-            //map.addLayer(polyLayer);
-            //polyLayer.add(polygonGraphic);
-            console.log("added poly graphic");
-          }
-        
-          function createToolbarAndContextMenu() {
-            toolbar = new Draw(map);
-            toolbar.on("draw-end", addToMap);
-            
-            // Create and setup editing tools
-            editToolbar = new Edit(map);
-
-            map.on("click", function(evt) {
-              editToolbar.deactivate();
-            });
-
-            createMapMenu();
-            createGraphicsMenu();
-          }
-
-          function createMapMenu() {
-            // Creates right-click context menu for map
-            var ctxMenuForMap = new Menu({
-              onOpen: function(box) {
-                // Lets calculate the map coordinates where user right clicked.
-                // We'll use this to create the graphic when the user clicks
-                // on the menu item to "Add Point"
-                currentLocation = getMapPointFromMenuPosition(box);          
-                editToolbar.deactivate();
-              }
-            });
-
-            ctxMenuForMap.addChild(new MenuItem({ 
-              label: "新区域",
-              onClick: function() {
-                toolbar.activate(Draw["POLYGON"]);
-                map.hideZoomSlider();
-              }
-            }));
-
-            ctxMenuForMap.startup();
-            ctxMenuForMap.bindDomNode(map.container);
-          }
-
-          function createGraphicsMenu() {
-            // Creates right-click context menu for GRAPHICS
-            var ctxMenuForGraphics = new Menu({});
-            ctxMenuForGraphics.addChild(new MenuItem({ 
-              label: "编辑",
-              onClick: function() {
-                if ( selected.geometry.type !== "point" ) {
-                  editToolbar.activate(Edit.EDIT_VERTICES, selected);
-                } else {
-                  alert("Not implemented");
-                }
-              } 
-            }));
-
-            ctxMenuForGraphics.addChild(new MenuItem({ 
-              label: "移动",
-              onClick: function() {
-                editToolbar.activate(Edit.MOVE, selected);
-              } 
-            }));
-          
-            ctxMenuForGraphics.addChild(new MenuSeparator());
-            ctxMenuForGraphics.addChild(new MenuItem({ 
-              label: "删除",
-              onClick: function() {
-                map.graphics.remove(selected);
-              }
-            }));
-
-            ctxMenuForGraphics.startup();
-
-            map.graphics.on("mouse-over", function(evt) {
-              // We'll use this "selected" graphic to enable editing tools
-              // on this graphic when the user click on one of the tools
-              // listed in the menu.
-              selected = evt.graphic;
-
-              // Let's bind to the graphic underneath the mouse cursor           
-              ctxMenuForGraphics.bindDomNode(evt.graphic.getDojoShape().getNode());
-            });
-
-            map.graphics.on("mouse-out", function(evt) {
-              ctxMenuForGraphics.unBindDomNode(evt.graphic.getDojoShape().getNode());
-            });
-          }
-
-          function getMapPointFromMenuPosition(box) {
-            var x = box.x, y = box.y;
-            switch( box.corner ) {
-              case "TR":
-                x += box.w;
-                break;
-              case "BL":
-                y += box.h;
-                break;
-              case "BR":
-                x += box.w;
-                y += box.h;
-                break;
-            }
-
-            var screenPoint = new Point(x - map.position.x, y - map.position.y);
-            return map.toMap(screenPoint);
           }
         }
       );
-
+      
       $(document).ready(function () {
         
         initialForm();
+        //loadMap(null);
         
         init_SmartWizard();
         
@@ -718,7 +544,7 @@
         $('#end-date').datepicker(options);*/
         
         $('#target-choose').click(function() {
-          buildTargetTable();
+          refreshTargetTable();
           $('#target-choose-dialog').modal();
         });
         
@@ -726,8 +552,10 @@
           var strTargetId = $("input[name='target']:checked").val();
           var targetId = parseInt(strTargetId);
           if (isInteger(targetId)) {
-            getTargetById(strTargetId);
-            setFormValue();
+            var target = getTargetById(strTargetId).data;
+            task.targetID = targetId;
+            setFormValue(target);
+            geoInfo = target.geoInfo;
             $('#map-confirm').trigger("click");
             $('#target-choose-dialog').modal('hide');
           }
@@ -738,7 +566,8 @@
         
         $('#confirm').click(function() {
           $('#confirm-create').modal('hide');
-          createTask(task);
+          var result = createTask(task);
+          showMessage(result.message);
         });
         
       });
@@ -822,8 +651,7 @@
       }
       
       function checkStep1() {
-        if (target.targetID > 0) {
-          task.targetID = target.targetID;
+        if (task.targetID > 0) {
           return true;
         }
         else{
@@ -1016,7 +844,7 @@
         return content;
       }
       
-      function setFormValue() {
+      function setFormValue(target) {
         //$("input:checkbox[name=CMCC]").prop("checked", false);
         //$("input:checkbox[name=CUCC]").prop("checked", false);
         $("#target-name").val(target.targetName);
@@ -1026,50 +854,43 @@
         $("input[name='resident'][value='" + target.userinfo.resident + "']").prop("checked",true);
       }
       
-      function createTaskProcess(result) {
+      function createTaskCallBackProcess(ajaxResult) {
         var message = "<p>新任务信息已提交</p>";
-        if (result.errcode >= 0) {
+        if (ajaxResult.errcode >= 0) {
           message += "<p>新任务信息已保存</>";
         }
         else {
-          message += "<p>新任务信息保存失败</p>"
+          message += "<p>新任务信息保存失败</p>";
           message += "<p>";
           message += result.errmsg;
           message += "</>";
         }
-        showMessage(message);
-        
+        return new Result(ajaxResult.errcode, message);
       }
       
       function createTask() {
-        if (target != null) {
+        if (task != null) {
           var body = JSON.stringify(task);
           var userId = getCookie('userId');
           var clientId = getCookie('clientId');
           var token = getCookie('token');
           var header = new AjaxHeader(userId, clientId, body, token);
           var url = baseUrl + 'taskCreate';
-          callAjax(url, header, body, createTaskProcess);
+          return callAjax(url, header, body, createTaskCallBackProcess);
         }
       }
       
-      function retrieveTargetByIdCallBackProcess(result, obj) {
-        if (result.errcode >= 0) {
-          var data = result.data;
-          target.targetID = data.targetID;
-          target.targetName = data.targetName;
-          target.createTime = data.createTime;
-          target.geoInfo = data.geoInfo;
-          target.userinfo = data.userinfo;
+      function retrieveTargetByIdCallBackProcess(ajaxResult) {
+        if (ajaxResult.errcode >= 0) {
+          return new RetrieveResult(ajaxResult.errcode, '', ajaxResult.data);
         }
         else {
-          showMessage(result.errmsg);
+          return new RetrieveResult(ajaxResult.errcode, ajaxResult.errmsg, null);
         }
       }
       
       function getTargetById(targetId) {
         var query = new Object;
-        
         query.targetID = targetId.toString();
         var body = JSON.stringify(query);
         var userId = getCookie('userId');
@@ -1077,35 +898,49 @@
         var token = getCookie('token');
         var header = new AjaxHeader(userId, clientId, body, token);
         var url = baseUrl + "targetInfo";
-        callAjax(url, header, body, retrieveTargetByIdCallBackProcess);
+        return callRetrieveAjax(url, header, body, retrieveTargetByIdCallBackProcess);
       }
       
-      function retrieveTargetCallBackProcess(result, obj) {
-        if (result.errcode >= 0) {
-          buildTargetTableContent(result.data.targetlist);
+      function retrieveTargetCallBackProcess(ajaxResult) {
+        if (ajaxResult.errcode >= 0) {
+          return new RetrieveResult(ajaxResult.errcode, '', ajaxResult.data.targetlist);
+        }
+        else {
+          return new RetrieveResult(ajaxResult.errcode, ajaxResult.errmsg, null);
         }
       }
       
-      function buildTargetTable() {        
-        var starttime = '19700101000000';
-        var endtime = '20991231235959';
+      function retrieveTargets(starttime, endtime) {
         
-        var obj = [];
         var query = new Object;
         query.starttime = starttime;
         query.endtime = endtime;
+
+        var result = new Object;
         var body = JSON.stringify(query);
         var userId = getCookie('userId');
         var clientId = getCookie('clientId');
         var token = getCookie('token');
         var header = new AjaxHeader(userId, clientId, body, token);
         var url = baseUrl + 'targetList';
-        callAjax(url, header, body, retrieveTargetCallBackProcess);
+        return callRetrieveAjax(url, header, body, retrieveTargetCallBackProcess);
         
-        return obj;
       }
       
-      function buildTargetTableContent(targets) {
+      function refreshTargetTable() {
+        var starttime = '19700101000000';
+        var endtime = '20991231235959';
+
+        var result = retrieveTargets(starttime, endtime);
+        if (result.code >= 0) {
+           buildTargetTable(result.data);
+        }
+        else {
+          showMessage(result.message);
+        }
+      }
+      
+      function buildTargetTable(targets) {
         $('#target-table tbody').empty();
         for (var i = 0; i <= targets.length - 1; i++){
           var content = "<tr class=\"odd pointer\">";

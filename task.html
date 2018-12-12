@@ -9,7 +9,7 @@
 
     <title>中新生态城</title>
 
-    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css" rel="stylesheet" media="screen">
+    <link href="./assets/css/bootstrap.min.css" rel="stylesheet" media="screen">
     <link href="./assets/css/font-awesome.min.css" rel="stylesheet">
     <link href="./assets/css/custom.css" rel="stylesheet">
     
@@ -195,8 +195,8 @@
       </div>
     </div>
 
-    <script src="https://code.jquery.com/jquery-1.11.1.min.js"></script>
-    <script src="assets/js/bootstrap.min.js"></script>
+    <script src="./assets/js/jquery-1.11.1.min.js"></script>
+    <script src="./assets/js/bootstrap.min.js"></script>
     <script src="./assets/js/date.js"></script>
     
     <script src="./assets/js/custom.js"></script>
@@ -207,19 +207,7 @@
       var cancelTaskId = 0;
       
       $(document).ready(function () {
-        var now = new Date();
-        var endday = ("0" + now.getDate()).slice(-2);
-        var endmonth = ("0" + (now.getMonth() + 1)).slice(-2);
-        var day2 = now.getFullYear()+"-"+(endmonth)+"-"+(endday);
-        $('#end-date').val(day2);
-        
-        var starttime = now.addDays(-7);
-         
-        var startday = ("0" + starttime.getDate()).slice(-2);
-        var startmonth = ("0" + (starttime.getMonth() + 1)).slice(-2);
-        var day1 = starttime.getFullYear()+"-"+(startmonth)+"-"+(startday) ;
-        
-        $('#start-date').val(day1);
+        initialForm();
         
         $('#search').click(function() {
           refreshTable();
@@ -228,8 +216,15 @@
         $(document).on("click", "#datatable button", function () {
           var name = this.name.toLowerCase();
           var id = parseInt(this.value);
-          
-          if (name == 'cancel') {
+          if (name == 'edit') {
+            setCookie('task-id', id, 1);
+            location.href = 'task_update.html';//跳转页面
+          }
+          else if (name == 'detail') {
+            setCookie('task-id', id, 1);
+            location.href = 'task_detail.html';//跳转页面
+          }
+          else if (name == 'cancel') {
             cancelTaskId = id;
             $('#confirm-cancel').modal();
           }
@@ -247,48 +242,40 @@
         });
       });
       
-      function retrieveTaskCallBackProcess(result) {
-        if (result.errcode >= 0) {
-          var list = result.data.taskList;
-          buildTable(list);
-        }
-        else {
-          showMessage(result.errmsg);
-        }
+      function initialForm() {
+        var now = new Date();
+        var endday = ("0" + now.getDate()).slice(-2);
+        var endmonth = ("0" + (now.getMonth() + 1)).slice(-2);
+        var day2 = now.getFullYear()+"-"+(endmonth)+"-"+(endday);
+        $('#end-date').val(day2);
+        
+        var starttime = now.addDays(-7);
+         
+        var startday = ("0" + starttime.getDate()).slice(-2);
+        var startmonth = ("0" + (starttime.getMonth() + 1)).slice(-2);
+        var day1 = starttime.getFullYear()+"-"+(startmonth)+"-"+(startday) ;
+        
+        $('#start-date').val(day1);
       }
-
+      
       function refreshTable() {
         var starttime = getFormatJsonStartTime($('#start-date').val());
         var endtime = getFormatJsonEndTime($('#end-date').val());
         var strStatus = $("input[name='status']:checked").val();
         var status = parseInt(strStatus);
-        var validStatusList = [0, 1, 100, -1];
         
-        if (starttime.length >0 && endtime.length > 0 && validStatusList.in_array(status)) {
-          var status = parseInt(strStatus);
-          var query = new Object;
-          query.starttime = starttime;
-          query.endtime = endtime;
-          query.status = status;
-        
-          var body = JSON.stringify(query);
-          var userId = getCookie('userId');
-          var clientId = getCookie('clientId');
-          var token = getCookie('token');
-          var header = new AjaxHeader(userId, clientId, body, token);
-          
-          var url = baseUrl + 'taskLists';
-        
-          callAjax(url, header, body, retrieveTaskCallBackProcess);
+        var result = retrieveTasks(starttime, endtime, status);
+        if (result.code >= 0) {
+           buildTable(result.data);
         }
         else {
-          showMessage("请选择状态和查询日期");
+          showMessage(result.message);
         }
       }
-
-      function cancelTaskCallBackProcess(result) {
+      
+      function cancelTaskCallBackProcess(ajaxResult) {
         var message = "<p>取消任务信息已提交</p>";
-        if (result.errcode >= 0) {
+        if (ajaxResult.errcode >= 0) {
           message += "<p>任务已取消</>";
         }
         else {
@@ -297,11 +284,10 @@
           message += result.errmsg;
           message += "</>"
         }
-        showMessage(message);
+        return new Result(ajaxResult.errcode, message);
       }
       
       function cancelTask(id) {
-        $('#modal-message').empty();
         var task = new Object;
         task.taskID = id.toString();
         var body = JSON.stringify(task);
@@ -310,8 +296,38 @@
         var token = getCookie('token');
         var header = new AjaxHeader(userId, clientId, body, token);
         var url = baseUrl + 'taskCancel';
-        
-        callAjax(url, header, body, cancelTaskCallBackProcess)
+        return callAjax(url, header, body, cancelTaskCallBackProcess);
+      }
+      
+      function retrieveTasksCallBackProcess(ajaxResult) {
+        if (ajaxResult.errcode >= 0) {
+          return new RetrieveResult(ajaxResult.errcode, '', ajaxResult.data.taskList);
+        }
+        else {
+          return new RetrieveResult(ajaxResult.errcode, ajaxResult.errmsg, null);
+        }
+      }
+      
+      function retrieveTasks(starttime, endtime, status) {
+        var validStatusList = [0, 1, 100, -1];
+
+        if (starttime.length >0 && endtime.length > 0 && validStatusList.in_array(status)) {
+          var query = new Object;
+          query.starttime = starttime;
+          query.endtime = endtime;
+          
+          var result = new Object;
+          var body = JSON.stringify(query);
+          var userId = getCookie('userId');
+          var clientId = getCookie('clientId');
+          var token = getCookie('token');
+          var header = new AjaxHeader(userId, clientId, body, token);
+          var url = baseUrl + 'taskLists';
+          return callRetrieveAjax(url, header, body, retrieveTasksCallBackProcess);
+        }
+        else {
+          return new RetrieveResult(-1, "请选择状态和查询日期", null);
+        }
       }
       
       function buildTable(tasks) {
