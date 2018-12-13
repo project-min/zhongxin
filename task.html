@@ -208,6 +208,7 @@
       
       $(document).ready(function () {
         initialForm();
+        refreshTable();
         
         $('#search').click(function() {
           refreshTable();
@@ -315,6 +316,7 @@
           var query = new Object;
           query.starttime = starttime;
           query.endtime = endtime;
+          query.status = status;
           
           var result = new Object;
           var body = JSON.stringify(query);

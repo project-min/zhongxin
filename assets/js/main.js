@@ -1,6 +1,8 @@
 //var baseUrl = "https://103.233.5.238:8443/api/v1/sms/";
 var baseUrl = "http://103.233.5.238:6688/api/v1/sms/";
-//var baseUrl = "http://127.0.0.1:8000/api/v1/sms/";
+
+//var mapServiceUrl = "http://10.254.11.105:8399/arcgis/rest/services/SQEcoMap/MapServer";
+var mapServiceUrl = "https://server.arcgisonline.com/arcgis/rest/services/World_Street_Map/MapServer";
 
 Array.prototype.in_array = function(value) {
   for (var i = 0; i < this.length; i++) {

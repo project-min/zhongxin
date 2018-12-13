@@ -372,6 +372,7 @@
               </div>
               <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                <a href="task.html" class="btn btn-primary" id="commit">返回任务列表</a>
               </div>
             </div><!-- /.modal-content -->
           </div><!-- /.modal-dialog -->
@@ -412,7 +413,6 @@
 
       var arrayPolygon = [];
 
-      
       require(
         ["esri/map",
          "esri/toolbars/draw",
@@ -480,7 +480,7 @@
           });
 
           var tiledLayer = new ArcGISTiledMapServiceLayer(
-            "https://server.arcgisonline.com/arcgis/rest/services/World_Street_Map/MapServer", 
+            mapServiceUrl, 
             { spatialReference: sr }
           );
 

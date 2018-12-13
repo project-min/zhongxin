@@ -165,6 +165,7 @@
                   
                   <div style="border-top: 2px solid #E6E9ED; padding: 0.5em; text-align: right;">
                     <button type="button" class="btn btn-primary" id="commit">保存</button>
+                    <a href="target.html" class="btn btn-primary" id="commit">返回</a>
                   </div>
                 </div>
               </div>
@@ -288,7 +289,7 @@
           });
 
           var tiledLayer = new ArcGISTiledMapServiceLayer(
-            "https://server.arcgisonline.com/arcgis/rest/services/World_Street_Map/MapServer", 
+            mapServiceUrl, 
             { spatialReference: sr }
           );
         
@@ -464,6 +465,7 @@
         $('#commit').click(function(){
           var result = createTarget();
           showMessage(result.message);
+          //location.href = 'task.html';
         })
       });
       
@@ -540,7 +542,7 @@
         else {
           message += "<p>信息保存失败</p>";
           message += "<p>";
-          message += result.errmsg;
+          message += ajaxResult.errmsg;
           message += "</>";
         }
         return new Result(ajaxResult.errcode, message);
